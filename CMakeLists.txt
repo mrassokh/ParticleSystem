@@ -62,7 +62,6 @@ set(LIB_INCLUDE_DIRS
 add_library(hello SHARED libs/testlib.cpp)
 
 set(PARTICLESYSTEM_LIBS
-	${hello}
   	${OPENGL_LIBRARY}
   	${SDL2_LIBRARY}
   	${GLEW_LIBRARIES}
@@ -83,4 +82,4 @@ set(PARTICLESYSTEM_INCLUDES
 include_directories(${PARTICLESYSTEM_INCLUDES})
 
 add_executable(particleSystem main.cpp ${PARTICLESYSTEM_SOURCES})
-target_link_libraries(particleSystem ${PARTICLESYSTEM_LIBS})
+target_link_libraries(particleSystem hello ${PARTICLESYSTEM_LIBS})
