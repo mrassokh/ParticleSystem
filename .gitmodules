@@ -10,3 +10,6 @@
 [submodule "3rdParty/glew"]
 	path = 3rdParty/glew
 	url = https://github.com/Perlmint/glew-cmake.git
+[submodule "3rdParty/CL"]
+	path = 3rdParty/CL
+	url = https://github.com/mrassokh/OpenCL_CXX.git

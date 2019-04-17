@@ -45,6 +45,7 @@ int main()
 
 	glm::vec3 up = glm::vec3(0.0f, 0.0f, -1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	cl::Context conext;
     //std::cout << " Hello, WONDERFULL cmake world!!!" << std::endl;
     return 0;
 }
