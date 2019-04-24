@@ -31,12 +31,14 @@ public:
 	View & operator=(View const & rhs) = delete;
 	virtual ~View();
 
-	virtual void changeMesh(INIT_MESH mesh);
+	virtual void 	changeMesh(INIT_MESH mesh);
+	void 			draw();
+	const SDL_Event getEvent() const {return m_event;}
 private:
 	void 			initView();
 	void 			initSDL();
 	void 			initOpenGL();
-	void 			draw();
+
 
 	INIT_MESH 		m_mesh;
 	int           	m_width;

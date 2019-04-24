@@ -17,15 +17,18 @@
 
 class Model : public Observable {
 public:
-	Model():m_mesh(SPHERE){};
+	Model():m_mesh(SPHERE), m_isRunning(true){};
 	Model(Model const & rhs) = delete;
 	Model & operator=(Model const & rhs) = delete;
 	virtual ~Model(){};
 
 	void 				setMesh(INIT_MESH mesh);
 	const INIT_MESH 	getMesh() const {return m_mesh;};
+	const bool			getIsRunning() const {return m_isRunning;};
+	void 				setIsRunning(bool isRunning) {m_isRunning = isRunning;};
 private:
-	INIT_MESH m_mesh;
+	INIT_MESH 	m_mesh;
+	bool 		m_isRunning;
 };
 
 #endif /* end of include guard:MODEL_HPP */

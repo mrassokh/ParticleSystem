@@ -11,3 +11,27 @@
 /* ************************************************************************** */
 
 
+#ifndef  CONTROLLER_HPP
+#define CONTROLLER_HPP
+#include "Model.hpp"
+#include "View.hpp"
+#include "InputManager.hpp"
+
+typedef std::unique_ptr<InputManager> ptrInput;
+class Controller {
+public:
+	Controller (Model *model, View	*view);
+	Controller(Controller & rhs) = delete;
+	Controller & operator=(Controller & rhs) = delete;
+	virtual ~Controller(){};
+
+	void 			liveCycle();
+	void 			eventsAnalyses(Events const & ev);
+
+private:
+	Model 			*m_model;
+	View			*m_view;
+	ptrInput		m_inputManager;
+};
+
+#endif /* end of include guard: CONTROLLER_HPP */
