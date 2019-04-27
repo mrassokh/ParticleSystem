@@ -13,13 +13,21 @@
 #ifndef  MVC_BASE_HPP
 #define MVC_BASE_HPP
 
+# define LIVE_TIME 2.0f
+
 #include <vector>
 
 enum INIT_MESH
 {
-	SPHERE,
-	CUBE
+	S,
+	C
 };
+
+typedef enum 	ParticleSystemType
+{
+	SPHERE,
+  	CUBE
+}				psType;
 
 class Observer {
 public:

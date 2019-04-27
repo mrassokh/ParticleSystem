@@ -120,6 +120,7 @@ void	CLEngine::addProgramSource(std::string const & fileName,
 	if (source == m_programSources.end()) {
 		cl::Program::Sources sources;
 		sources.push_back(std::make_pair(strdup(sourceStr.c_str()), sourceStr.length() + 1)); // we use strdup here. it calls malloc. but who will free that memory?
+		std::cout << sourceStr.c_str() << std::endl;
 		m_programSources.emplace(std::make_pair(sourceName, sources));
 	} else {
 		source->second.push_back(std::make_pair(strdup(sourceStr.c_str()), sourceStr.length() + 1));

@@ -12,7 +12,9 @@
 
 #include "View.hpp"
 
-View::View(Model *model) : m_mesh(SPHERE), m_width(WIN_X), m_height(WIN_Y), m_head (""),m_model(model)
+
+
+View::View(Model *model) : m_mesh(S), m_width(WIN_X), m_height(WIN_Y), m_head (""),m_model(model)
 {
 	initView();
 	m_model->addObserver(this);
@@ -67,7 +69,13 @@ void 		View::initSDL()
 
 void 		View::initOpenGL()
 {
+	glewExperimental = true;
 	GLenum err = glewInit();
+	if (err != GLEW_OK)
+	{
+		printf("Aaaaaaaaaaa!");
+		exit(0);
+	}
 	glViewport(0, 0, m_width, m_height);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_MULTISAMPLE);
@@ -77,6 +85,8 @@ void 		View::draw()
 {
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glViewport(0, 0, 800, 600);
+	m_model->draw();
 	SDL_GL_SwapWindow(m_window);
 	SDL_PollEvent(&m_event);
 }
