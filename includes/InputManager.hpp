@@ -16,16 +16,20 @@
 
 enum class Events
 {
-    NOTHING,
+    DEFAULT,
     FINISH,
     FORWARD,
     BACKWARD,
     UP,
     DOWN,
     RIGHT,
-    LEFT
+    LEFT,
+	ROTATE
 };
-
+struct mouseShiftCoord {
+	int x;
+	int y;
+}
 class InputManager {
 public:
 	InputManager(){};
@@ -33,12 +37,19 @@ public:
 	InputManager operator = (InputManager const & rhs) = delete;
 	~InputManager(){};
 
+	mouseShiftCoord & getMouseShiftCoord() const { return m_mouseShift;};
 	Events eventProcessing(SDL_Event ev);
-    /*Events KeyDownProcessin(SDL_Keycode keyPressed);
-    Events processMouseMotion(SDL_Event const &ev);
-    Events processMouseButton(SDL_MouseButtonEvent const &ev, bool isPressed);*/
-//private:
 
+private:
+	Events keyProcessing(SDL_Keycode keyPressed);
+	Events mouseMoveProcessing(SDL_Event const &ev);
+	Events mouseButtonProcessing(SDL_MouseButtonEvent const &ev, bool buttonPressed);
+
+	bool 				m_isMouseRightButtomPressed;
+	bool 				m_isMouseLeftButtomPressed;
+	int 				m_prevXMouse;
+	int 				m_prevYMouse;
+	mouseShiftCoord		m_mouseShift;
 };
 
 

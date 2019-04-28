@@ -85,8 +85,15 @@ void 		View::draw()
 {
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glViewport(0, 0, 800, 600);
-	m_model->draw();
+	 glViewport(0, 0, 800, 600);
+	 m_model->draw();
+	 m_model->m_shader->use();
+	 m_model->m_shader->setMat4("view", m_model->view);
+ 	m_model->m_shader->setMat4("projection", m_model->projection);
+	glBindVertexArray(m_model->VAO);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glBindVertexArray(0);
+
 	SDL_GL_SwapWindow(m_window);
 	SDL_PollEvent(&m_event);
 }

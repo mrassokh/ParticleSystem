@@ -56,19 +56,18 @@ void 			ParticleManager::draw(glm::mat4 const & projection, glm::mat4 const & vi
 {
 	//auto start = std::chrono::high_resolution_clock::now();
 	std::vector<glm::mat4> transforms;
-	for (int i = 0; i < 10; ++i){
+	for (int i = 0; i < 1; ++i){
 				glm::mat4 model = glm::mat4(1.0f);
 				//model =  glm::translate(model, glm::vec3(-2.5f, 0.0f, -2.5f));
-				model = glm::translate(model, glm::vec3(3.0f ,0.0f,2.0f* (i + 1)));
+				//model = glm::translate(model, glm::vec3(3.0f ,0.0f,2.0f* (i + 1)));
 				transforms.push_back(model);
 			}
 	int i = 0;
 	for (auto & element : m_particleSystems) {
 		//std::cout << "try draw element: " << element.first<<std::endl;
-		printf("draw element with %d",i++);
+		//printf("draw element with %d",i++);
 		auto & ps = element;
 		if (ps->chekLiveTime()){
-			printf("draw element with  when checkLiveTime %d",i);
 			// std::cout << "draw element: " << element.first<<std::endl;
 			// auto start1 = std::chrono::high_resolution_clock::now();
 			ps->updateGLBufers(ps->getUpdateKernelName());

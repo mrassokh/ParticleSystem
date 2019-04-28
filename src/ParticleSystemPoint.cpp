@@ -102,6 +102,8 @@ void 			ParticleSystemPoint::drawGLContent(glm::mat4 const & projection, glm::ma
 	m_shader->use();
 	m_shader->setMat4("projection", projection);
 	m_shader->setMat4("view", view);
+	std::cout << "drawGLContent \n ";
+//	printf("drawGLContent \n");
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glBindBuffer(GL_ARRAY_BUFFER, m_IBO);

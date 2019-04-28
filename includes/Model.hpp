@@ -19,6 +19,7 @@
 #include "GL/glew.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+
 typedef std::unique_ptr<ParticleManager> particleManager;
 
 class Model : public Observable {
@@ -34,6 +35,13 @@ public:
 	void 				setIsRunning(bool isRunning) {m_isRunning = isRunning;};
 	void 				initModel();
 	void 				draw();
+
+	GLuint VBO;
+	GLuint VAO;
+	GLuint vertexShader;
+	std::shared_ptr<Shader> m_shader;
+	glm::mat4 view;
+	glm::mat4 projection;
 private:
 	void 				loadResources();
 	void 				initParticleSystems();
@@ -42,8 +50,7 @@ private:
 	bool 				m_isRunning;
 	particleManager 	m_particleManager;
 
-	GLuint VBO;
-	GLuint vertexShader;
+
 
 };
 

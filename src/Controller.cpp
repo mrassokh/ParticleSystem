@@ -21,6 +21,7 @@ void 		Controller::liveCycle()
 {
 	while (m_model->getIsRunning())
 	{
+		//m_model->draw();
 		m_view->draw();
 		//const SDL_Event e = m_view->getEvent();
 		eventsAnalyses(m_inputManager->eventProcessing(m_view->getEvent()));
@@ -34,6 +35,9 @@ void 		Controller::eventsAnalyses(Events const &ev)
 		case Events::FINISH:
 		m_model->setIsRunning(false);
 			break;
+			/*case Events::FINISH:
+			m_model->setIsRunning(false);
+				break;*/
 		default:
 			break;
 	}

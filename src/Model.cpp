@@ -28,19 +28,24 @@ void 		Model::initModel()
 	loadResources();
 	initParticleSystems();
 
-	/*GLfloat vertices[] = {
+	GLfloat vertices[] = {
 	    -0.5f, -0.5f, 0.0f,
 	     0.5f, -0.5f, 0.0f,
 	     0.0f,  0.5f, 0.0f
 	};
 
+	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
+
+	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+glEnableVertexAttribArray(0);
+glBindBuffer(GL_ARRAY_BUFFER, 0);
+//4. Отвязываем VAO
+glBindVertexArray(0);
 
-vertexShader = glCreateShader(GL_VERTEX_SHADER);
-glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-glCompileShader(vertexShader);*/
 }
 
 void 		Model::loadResources()
@@ -54,24 +59,38 @@ void 		Model::loadResources()
 		std::cout << ex.what() << std::endl;
 		exit(42);
 	}
+	m_shader = RESOURCE.getShader("point_shader");
 }
 
 void 		Model::initParticleSystems()
 {
 	m_particleManager->init();
-	//m_particleManager->startDrawPS(SPHERE);
+	m_particleManager->startDrawPS(SPHERE);
 }
 
 void 		Model::draw()
 {
+	glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f,  10.0f);
+	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+	glm::vec3 pointTo = glm::vec3(0.0f, 0.0f, -1.0f);
+	glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
+	//glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+	view = glm::lookAt(cameraPos, pointTo, cameraUp);
+	projection = glm::perspective(glm::radians(90.0f), static_cast<float>(800) / static_cast<float>(600), 0.5f, 100.0f);
+	/*m_shader->use();
+	m_shader->setMat4("view", view);
+	m_shader->setMat4("projection", projection);
+	glBindVertexArray(VAO);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glBindVertexArray(0);*/
 
-	/*glm::mat4 groundModel = glm::mat4(1.0f);
+	//glm::mat4 groundModel = glm::mat4(1.0f);
 	//std::vector<glm::mat4> transforms;
 	//transforms.push_back(groundModel);
-	glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f,  0.0f);
+	/*glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f,  0.0f);
 	glm::vec3 cameraFront = glm::vec3(1.0f, 1.0f, -1.0f);
 	glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
 	glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-	glm::mat4 projection = glm::perspective(glm::radians(45.3f), static_cast<float>(800) / static_cast<float>(600), 0.1f, 10.0f);
-	m_particleManager->draw(projection, view);*/
+	glm::mat4 projection = glm::perspective(glm::radians(45.3f), static_cast<float>(800) / static_cast<float>(600), 0.1f, 10.0f);*/
+	m_particleManager->draw(projection, view);
 }

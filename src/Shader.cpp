@@ -61,7 +61,7 @@ void 		Shader::readSources()
 
 		m_vertShaderCode = vShaderStream.str();
 		m_fragShaderCode = fShaderStream.str();
-		std::cout << m_vertShaderCode << "\n" << m_fragShaderCode << std::endl;
+		std::cout <<"vert shader is\n" << m_vertShaderCode << "\n" << "frag shader is\n" << m_fragShaderCode << std::endl;
 	}
 	catch(std::ifstream::failure &e)
 	{
@@ -73,7 +73,7 @@ void 		Shader::createShader(std::string const & shaderCode, GLenum shaderType, G
 {
 	const char* src = shaderCode.c_str();
 	///std::cout << "createShader_0" << std::endl;
-	shader = glCreateShader(GL_VERTEX_SHADER);//(shaderType);
+	shader = glCreateShader(shaderType);
 	//m_vertShader = glCreateShader(GL_VERTEX_SHADER);
 	//std::cout << "createShader_0_1" << std::endl;
 	glShaderSource(shader, 1, &src, nullptr);
