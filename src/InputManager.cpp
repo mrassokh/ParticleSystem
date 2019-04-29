@@ -74,11 +74,11 @@ Events InputManager::mouseButtonProcessing(SDL_MouseButtonEvent const &ev, bool 
 	switch (ev.button)
     {
         case SDL_BUTTON_RIGHT:
-			if (!m_isMouseLeftButtomPressed){
+			if (!m_isMouseLeftButtomPressed) {
             	m_isMouseRightButtomPressed = buttonPressed;
             	m_prevXMouse = ev.x;
             	m_prevYMouse = ev.y;
-			}
+				}
         break;
 		case SDL_BUTTON_LEFT:
 			if (!m_isMouseRightButtomPressed){

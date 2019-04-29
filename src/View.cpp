@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "View.hpp"
+#define  STANDARD_MENU_BUTTON {200, 30}
 
 
 
@@ -39,7 +40,7 @@ void 		View::initView()
 	m_context = SDL_GL_CreateContext(m_window);
 	SDL_GL_MakeCurrent(m_window, m_context);
 	SDL_SetWindowResizable(m_window, SDL_TRUE);
-
+	initGui();
 	initOpenGL();
 }
 
@@ -81,19 +82,87 @@ void 		View::initOpenGL()
 	glEnable(GL_MULTISAMPLE);
 }
 
+void 	View::initGui() {
+
+    IMGUI_CHECKVERSION();
+
+    ImGui::CreateContext();
+    ImGuiIO &io = ImGui::GetIO();
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    ImGui_ImplSdlGL3_Init(m_window);
+
+    ImGui::StyleColorsDark();
+
+    // io.Fonts->AddFontFromFileTTF("Assets/font/Roboto-Medium.ttf", 16.0f);
+
+}
+
 void 		View::draw()
 {
+	defineDeltaTime();
+	//std::cout << "View deltatime is " << m_deltaTime;
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	 glViewport(0, 0, 800, 600);
+	 glViewport(0, 0, m_width, m_height);
+	 m_projection = glm::perspective(glm::radians(m_model->getCameraZoom()), static_cast<float>(m_width) / static_cast<float>(m_height), 0.1f, 100.0f);
 	 m_model->draw();
 	 m_model->m_shader->use();
-	 m_model->m_shader->setMat4("view", m_model->view);
- 	m_model->m_shader->setMat4("projection", m_model->projection);
+	 m_model->m_shader->setMat4("view", m_model->getCameraView());
+	// m_model->m_shader->setMat4("view", m_model->view);
+ 	m_model->m_shader->setMat4("projection", m_projection);
 	glBindVertexArray(m_model->VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 	glBindVertexArray(0);
 
+ImGui_ImplSdlGL3_NewFrame(m_window);
+	ImGui::SetNextWindowSize(WIN_SIZE, ImGuiSetCond_FirstUseEver);
+		ImGui::SetNextWindowPos({0, 0},0);
+		ImGui::SetNextWindowBgAlpha(0.7f);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(220,100));
+		ImGui::Begin("Main Menu");
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
+		ImGui::Text("Welcome to BomberMan game!");
+
+		/////////////////////////////////HARDNESS////////////////////////////////////
+
+		//ImGui::Separator();
+
+		//ShowHardnessRadioButtons();
+
+		/////////////////////////////////START GAME////////////////////////////////////
+
+		//ImGui::Separator();
+
+		const ImVec2 menu_frame = {200, 120};
+		const float spacing = 10;
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, spacing));
+		ImGui::BeginChildFrame(1, menu_frame, 4);
+
+		//ShowStartNewGameMenu();
+
+		/////////////////////////////////LOAD GAME////////////////////////////////////
+
+		//ShowLoadSavedGamesMenu();
+
+		/////////////////////////////////EXIT////////////////////////////////////
+
+		ImGui::Button("EXIT", STANDARD_MENU_BUTTON);
+
+		ImGui::EndChildFrame();
+		ImGui::PopStyleVar();
+		ImGui::PopStyleVar();
+		ImGui::End();
+		ImGui::PopStyleVar();
+	ImGui::Render();
+    ImGui_ImplSdlGL3_RenderDrawData(ImGui::GetDrawData());
+
 	SDL_GL_SwapWindow(m_window);
 	SDL_PollEvent(&m_event);
+}
+
+void 		View::defineDeltaTime()
+{
+	m_lastTime = m_curTime;
+	m_curTime = SDL_GetPerformanceCounter();
+	m_deltaTime = (m_curTime - m_lastTime) / static_cast<float>(SDL_GetPerformanceFrequency());
 }

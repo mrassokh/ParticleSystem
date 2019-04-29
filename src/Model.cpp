@@ -15,6 +15,8 @@
 Model::Model():m_mesh(S), m_isRunning(true)
 {
 	m_particleManager = std::make_unique<ParticleManager>();
+	glm::vec3 pos = glm::vec3(0.0f,0.0f,1.0f);
+	m_camera = std::make_unique<Camera>(pos, -90.0f, 0.0f, 90.0f);
 }
 
 void 		Model::setMesh(INIT_MESH mesh)
@@ -94,3 +96,8 @@ void 		Model::draw()
 	glm::mat4 projection = glm::perspective(glm::radians(45.3f), static_cast<float>(800) / static_cast<float>(600), 0.1f, 10.0f);*/
 	m_particleManager->draw(projection, view);
 }
+
+/*void 		Model::cameraRotate(const float deltaTime, float deltaX, float deltaY)
+{
+
+}*/

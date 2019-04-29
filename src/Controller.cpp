@@ -31,13 +31,27 @@ void 		Controller::liveCycle()
 
 void 		Controller::eventsAnalyses(Events const &ev)
 {
+	mouseShiftCoord mouseShift;
 	switch (ev) {
 		case Events::FINISH:
-		m_model->setIsRunning(false);
-			break;
-			/*case Events::FINISH:
 			m_model->setIsRunning(false);
-				break;*/
+			break;
+		case Events::FORWARD:
+			m_model->cameraMoveForward(m_view->getDeltaTime());
+			break;
+		case Events::BACKWARD:
+			m_model->cameraMoveBackward(m_view->getDeltaTime());
+			break;
+		case Events::RIGHT:
+			m_model->cameraMoveRight(m_view->getDeltaTime());
+			break;
+		case Events::LEFT:
+			m_model->cameraMoveLeft(m_view->getDeltaTime());
+			break;
+		case Events::ROTATE:
+			mouseShift =  m_inputManager->getMouseShiftCoord();
+			m_model->cameraRotate(mouseShift.x, mouseShift.y);
+			break;
 		default:
 			break;
 	}

@@ -26,10 +26,12 @@ enum class Events
     LEFT,
 	ROTATE
 };
+
 struct mouseShiftCoord {
 	int x;
 	int y;
-}
+};
+
 class InputManager {
 public:
 	InputManager(){};
@@ -37,7 +39,7 @@ public:
 	InputManager operator = (InputManager const & rhs) = delete;
 	~InputManager(){};
 
-	mouseShiftCoord & getMouseShiftCoord() const { return m_mouseShift;};
+	mouseShiftCoord const & getMouseShiftCoord() const { return m_mouseShift;};
 	Events eventProcessing(SDL_Event ev);
 
 private:

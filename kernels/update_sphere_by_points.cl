@@ -1,4 +1,4 @@
-#define GAME_QUAD_SIZE	1.5f
+#define GAME_QUAD_SIZE	100.5f
 #define MAX_SPHERE_RADIUS GAME_QUAD_SIZE
 #define INF	(float4)(10000.0f, 10000.0f, 10000.0f, 1.0f)
 #define NULITY	(float4)(0.0f, 0.0f, 0.0f, 0.0f)
