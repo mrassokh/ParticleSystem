@@ -19,6 +19,7 @@ View::View(Model *model) : m_mesh(S), m_width(WIN_X), m_height(WIN_Y), m_head ("
 {
 	initView();
 	m_model->addObserver(this);
+
 }
 
 View::~View()
@@ -40,8 +41,13 @@ void 		View::initView()
 	m_context = SDL_GL_CreateContext(m_window);
 	SDL_GL_MakeCurrent(m_window, m_context);
 	SDL_SetWindowResizable(m_window, SDL_TRUE);
-	initGui();
+	initImGui();
 	initOpenGL();
+	m_imGuiInfo.ps = S;
+	m_imGuiInfo.prev_ps = m_imGuiInfo.ps;
+	m_imGuiInfo.particle_count = 1000000;
+	m_imGuiInfo.prev_particle_count = m_imGuiInfo.particle_count;
+	m_imGuiEvent = imGuiEvent::DEFAULT;
 }
 
 void 		View::initSDL()
@@ -82,7 +88,7 @@ void 		View::initOpenGL()
 	glEnable(GL_MULTISAMPLE);
 }
 
-void 	View::initGui() {
+void 	View::initImGui() {
 
     IMGUI_CHECKVERSION();
 
@@ -96,7 +102,56 @@ void 	View::initGui() {
     // io.Fonts->AddFontFromFileTTF("Assets/font/Roboto-Medium.ttf", 16.0f);
 
 }
+void 		View::drawImGui()
+{
+	ImGui_ImplSdlGL3_NewFrame(m_window);
+		ImGui::SetNextWindowSize(WIN_SIZE, ImGuiSetCond_FirstUseEver);
+			ImGui::SetNextWindowPos({0, 0},0);
+			ImGui::SetNextWindowBgAlpha(0.7f);
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(100,100));
+			ImGui::Begin("Menu");
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
+			//ImGui::Text("Welcome to BomberMan game!");
+			//ImGui::SliderInt("particles number", &m_model->getCurrentParticleSystemCount(), 100000, 3000000);
+			ImGui::SliderInt("particles number", &m_imGuiInfo.particle_count, 100000, 3000000);
 
+			ImGui::RadioButton("SPHERE", &m_imGuiInfo.ps, S);
+			ImGui::RadioButton("CUBE", &m_imGuiInfo.ps, C);
+			/////////////////////////////////HARDNESS////////////////////////////////////
+
+			//ImGui::Separator();
+
+			//ShowHardnessRadioButtons();
+
+			/////////////////////////////////START GAME////////////////////////////////////
+
+			//ImGui::Separator();
+
+			const ImVec2 menu_frame = {200, 120};
+			const float spacing = 10;
+			//ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, spacing));
+			//ImGui::BeginChildFrame(1, menu_frame, 4);
+
+			//ShowStartNewGameMenu();
+
+			/////////////////////////////////LOAD GAME////////////////////////////////////
+
+			//ShowLoadSavedGamesMenu();
+
+			/////////////////////////////////EXIT////////////////////////////////////
+
+			//ImGui::Button("EXIT", STANDARD_MENU_BUTTON);
+
+//ImGui::Text("MovableEntity setting:");
+			//ImGui::EndChildFrame();
+			//ImGui::PopStyleVar();
+			ImGui::PopStyleVar();
+			ImGui::End();
+			ImGui::PopStyleVar();
+
+		ImGui::Render();
+	    ImGui_ImplSdlGL3_RenderDrawData(ImGui::GetDrawData());
+}
 void 		View::draw()
 {
 	defineDeltaTime();
@@ -114,50 +169,10 @@ void 		View::draw()
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 	glBindVertexArray(0);
 
-ImGui_ImplSdlGL3_NewFrame(m_window);
-	ImGui::SetNextWindowSize(WIN_SIZE, ImGuiSetCond_FirstUseEver);
-		ImGui::SetNextWindowPos({0, 0},0);
-		ImGui::SetNextWindowBgAlpha(0.7f);
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(220,100));
-		ImGui::Begin("Main Menu");
-		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
-		ImGui::Text("Welcome to BomberMan game!");
-
-		/////////////////////////////////HARDNESS////////////////////////////////////
-
-		//ImGui::Separator();
-
-		//ShowHardnessRadioButtons();
-
-		/////////////////////////////////START GAME////////////////////////////////////
-
-		//ImGui::Separator();
-
-		const ImVec2 menu_frame = {200, 120};
-		const float spacing = 10;
-		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, spacing));
-		ImGui::BeginChildFrame(1, menu_frame, 4);
-
-		//ShowStartNewGameMenu();
-
-		/////////////////////////////////LOAD GAME////////////////////////////////////
-
-		//ShowLoadSavedGamesMenu();
-
-		/////////////////////////////////EXIT////////////////////////////////////
-
-		ImGui::Button("EXIT", STANDARD_MENU_BUTTON);
-
-		ImGui::EndChildFrame();
-		ImGui::PopStyleVar();
-		ImGui::PopStyleVar();
-		ImGui::End();
-		ImGui::PopStyleVar();
-	ImGui::Render();
-    ImGui_ImplSdlGL3_RenderDrawData(ImGui::GetDrawData());
-
-	SDL_GL_SwapWindow(m_window);
+	drawImGui();
 	SDL_PollEvent(&m_event);
+	imGuiPollEvent();
+	SDL_GL_SwapWindow(m_window);
 }
 
 void 		View::defineDeltaTime()
@@ -165,4 +180,19 @@ void 		View::defineDeltaTime()
 	m_lastTime = m_curTime;
 	m_curTime = SDL_GetPerformanceCounter();
 	m_deltaTime = (m_curTime - m_lastTime) / static_cast<float>(SDL_GetPerformanceFrequency());
+}
+
+void 		View::imGuiPollEvent()
+{
+	m_imGuiEvent = imGuiEvent::DEFAULT;
+	if (m_imGuiInfo.ps != m_imGuiInfo.prev_ps) {
+		m_imGuiInfo.prev_ps = m_imGuiInfo.ps;
+		m_imGuiEvent = imGuiEvent::PARTICLE_SYSTEM_CHANGE;
+		return;
+	}
+	if (m_imGuiInfo.particle_count != m_imGuiInfo.prev_particle_count) {
+		m_imGuiInfo.prev_particle_count = m_imGuiInfo.particle_count;
+		m_imGuiEvent = imGuiEvent::PARTICLES_NUMBERS_CHANGE;
+		return;
+	}
 }

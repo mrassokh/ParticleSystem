@@ -12,7 +12,7 @@
 
 #include "testlib.h"
 #include "system.h"
-#include "View.hpp"
+//   #include "View.hpp"
 #include "Controller.hpp"
 
 //void Hello();

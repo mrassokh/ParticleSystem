@@ -26,6 +26,7 @@ typedef std::unique_ptr<Camera> cameraPtr;
 
 const float MOVE_SPEED       =  1.1f;
 const float MOUSE_SENSITIVITY =  0.3f;
+const float DISTANCE_FROM_CAMERA_TO_GRAVITY_PLANE =  1.0f;
 
 class Model : public Observable {
 public:
@@ -50,6 +51,14 @@ public:
 	void 				initModel();
 	void 				draw();
 
+	void   				setIsGravityActive(bool isGravity) {m_isGravityActive = isGravity;};
+	void   				setGravityCenter(int mouseX, int mouseY, int width, int height);// {m_isGravityActive = isGravity};
+	void 				dropToDefaultGravityCenter();
+	void   				setDefaultView();
+	void 				changeIsCameraMoveMode(){m_camera->changeIsCameraMoveMode();};
+	int & 				getCurrentParticleSystemCount() {m_particleManager->getCurrentParticleSystemCount(m_mesh);};
+
+
 	GLuint VBO;
 	GLuint VAO;
 	GLuint vertexShader;
@@ -62,11 +71,10 @@ private:
 
 	INIT_MESH 			m_mesh;
 	bool 				m_isRunning;
+	bool 				m_isGravityActive;
+	glm::vec3			m_gravityCenter;
 	particleManager 	m_particleManager;
 	cameraPtr			m_camera;
-
-
-
 };
 
 #endif /* end of include guard:MODEL_HPP */

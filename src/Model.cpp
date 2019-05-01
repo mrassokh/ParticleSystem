@@ -12,7 +12,7 @@
 
 #include "Model.hpp"
 
-Model::Model():m_mesh(S), m_isRunning(true)
+Model::Model():m_mesh(S), m_isRunning(true),m_isGravityActive(false), m_gravityCenter(glm::vec3(0.0f,0.0f,0.0f))
 {
 	m_particleManager = std::make_unique<ParticleManager>();
 	glm::vec3 pos = glm::vec3(0.0f,0.0f,1.0f);
@@ -29,11 +29,15 @@ void 		Model::initModel()
 {
 	loadResources();
 	initParticleSystems();
+	float x = m_gravityCenter.x;
+	float y = m_gravityCenter.y;
+	float z = m_gravityCenter.z;
+
 
 	GLfloat vertices[] = {
-	    -0.5f, -0.5f, 0.0f,
-	     0.5f, -0.5f, 0.0f,
-	     0.0f,  0.5f, 0.0f
+	    -0.5f + x, -0.5f + y, 0.0f + z,
+	     0.5f + x, -0.5f + y, 0.0f + z,
+	     0.0f + x,  0.5f + y, 0.0f + z
 	};
 
 	glGenVertexArrays(1, &VAO);
@@ -45,7 +49,7 @@ void 		Model::initModel()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 glEnableVertexAttribArray(0);
 glBindBuffer(GL_ARRAY_BUFFER, 0);
-//4. Отвязываем VAO
+
 glBindVertexArray(0);
 
 }
@@ -97,6 +101,31 @@ void 		Model::draw()
 	m_particleManager->draw(projection, view);
 }
 
+void   			Model::setGravityCenter(int mouseX, int mouseY, int width, int height)
+{
+	int centeredX = mouseX - width / 2;
+	int centeredY = -(mouseY - height / 2);
+	float rightDistance = static_cast<float> (centeredX * 2) / static_cast<float>(width);
+	float upDistance = static_cast<float> (centeredY * 2) / static_cast<float>(height);
+	glm::vec3 rightVector = m_camera->getRight() *  rightDistance;
+	glm::vec3 upVector = m_camera->getUp() *  upDistance;
+	glm::vec3 forwardVector = m_camera->getDirection() * DISTANCE_FROM_CAMERA_TO_GRAVITY_PLANE;
+	m_gravityCenter = m_camera->getPosition() + forwardVector + rightVector + upVector;
+
+	std::cout << m_gravityCenter.x << " " << m_gravityCenter.y << " " << m_gravityCenter.z << std::endl;
+}
+
+void   			Model::dropToDefaultGravityCenter()
+{
+	m_gravityCenter = glm::vec3(0.0f,0.0f,0.0f);
+	std::cout << m_gravityCenter.x << " " << m_gravityCenter.y << " " << m_gravityCenter.z << std::endl;
+}
+
+void   			Model::setDefaultView()
+{
+	dropToDefaultGravityCenter();
+	m_camera->dropToDefaultCamera();
+}
 /*void 		Model::cameraRotate(const float deltaTime, float deltaX, float deltaY)
 {
 

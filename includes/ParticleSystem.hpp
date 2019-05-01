@@ -20,6 +20,7 @@
 #include <chrono>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "MVCBase.hpp"
 
 # define LIVE_TIME 2.0f
 # define LIVE_TIME_CLOUD 2000000.0f
@@ -60,6 +61,8 @@ public:
 
 	std::string const & 		getInitKernelName() const;
 	std::string const & 		getUpdateKernelName() const;
+	int &						getParticleCount() {return m_particleCount;};
+	float &						getLiveTime() {return m_liveTime;};
 	void 						setInitKernelName(std::string const & initName);
 	void 						setUpdateKernelName(std::string const & updateName);
 

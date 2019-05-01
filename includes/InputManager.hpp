@@ -13,6 +13,9 @@
 #ifndef  INPUT_MANAGER
 #define INPUT_MANAGER
 #include "SDL.h"
+#include "View.hpp"
+#include <imgui.h>
+#include "imgui_impl_sdl_gl3.h"
 
 enum class Events
 {
@@ -24,7 +27,14 @@ enum class Events
     DOWN,
     RIGHT,
     LEFT,
-	ROTATE
+	ROTATE,
+	CHANGE_CAMERA_MOVE_MODE,
+	GRAVITY_ON,
+	GRAVITY_OFF,
+	SET_GRAVITY_CENTER,
+	DROP_TO_DEFAULT_VIEW,
+	PARTICLE_SYSTEM_CHANGE,
+	PARTICLES_NUMBERS_CHANGE
 };
 
 struct mouseShiftCoord {
@@ -39,9 +49,11 @@ public:
 	InputManager operator = (InputManager const & rhs) = delete;
 	~InputManager(){};
 
-	mouseShiftCoord const & getMouseShiftCoord() const { return m_mouseShift;};
-	Events eventProcessing(SDL_Event ev);
-
+	mouseShiftCoord const & getMouseShiftCoord() const {return m_mouseShift;};
+	Events 					eventProcessing(SDL_Event ev);
+	Events 					imGuiEventProcessing(imGuiEvent ev);
+	int const				getXMouse() const {return m_prevXMouse;};
+	int const				getYMouse() const {return m_prevYMouse;};
 private:
 	Events keyProcessing(SDL_Keycode keyPressed);
 	Events mouseMoveProcessing(SDL_Event const &ev);
@@ -49,6 +61,7 @@ private:
 
 	bool 				m_isMouseRightButtomPressed;
 	bool 				m_isMouseLeftButtomPressed;
+	bool				m_isGravityActive;
 	int 				m_prevXMouse;
 	int 				m_prevYMouse;
 	mouseShiftCoord		m_mouseShift;

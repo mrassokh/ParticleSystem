@@ -14,8 +14,8 @@
 #ifndef  CONTROLLER_HPP
 #define CONTROLLER_HPP
 #include "Model.hpp"
-#include "View.hpp"
 #include "InputManager.hpp"
+
 
 typedef std::unique_ptr<InputManager> ptrInput;
 class Controller {
@@ -27,6 +27,7 @@ public:
 
 	void 			liveCycle();
 	void 			eventsAnalyses(Events const & ev);
+	void 			imGuiEventsAnalyses(Events const & ev);
 
 private:
 	Model 			*m_model;

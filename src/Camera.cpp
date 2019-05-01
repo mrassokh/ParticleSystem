@@ -17,7 +17,8 @@ Camera::Camera(glm::vec3 pos, float yaw, float pitch,
 														m_commonUp(glm::vec3(0.0f, 1.0f,  0.0f)),
 														m_yaw(yaw),
 														m_pitch(pitch),
-														m_zoom(zoom)
+														m_zoom(zoom),
+														m_isCameraMove(false)
 {
 	calculateCameraVectors();
 	findView();
@@ -34,6 +35,8 @@ Camera::~Camera()
 
 void 		Camera::move(CameraChange ev,float const velocity)
 {
+	if (!m_isCameraMove)
+		return;
 	(this->*m_moveFunc[ev])(velocity);
 	findView();
 }
@@ -56,12 +59,24 @@ void 		Camera::calculateCameraDirection()
 
 void 		Camera::rotate(float const deltaYaw,float const deltaPitch)
 {
+	if (!m_isCameraMove)
+		return;
 	m_yaw += deltaYaw;
 	m_pitch += deltaPitch;
 	if(m_pitch > 89.0f)
   		m_pitch =  89.0f;
 	if(m_pitch < -89.0f)
   		m_pitch = -89.0f;
+	calculateCameraVectors();
+	findView();
+}
+
+void 		Camera::dropToDefaultCamera()
+{
+	m_position = glm::vec3(0.0f,0.0f,1.0f);
+	m_yaw = -90.0f;
+	m_pitch = 0.0f;
+	m_zoom = 90.0f;
 	calculateCameraVectors();
 	findView();
 }

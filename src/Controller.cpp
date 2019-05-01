@@ -25,6 +25,7 @@ void 		Controller::liveCycle()
 		m_view->draw();
 		//const SDL_Event e = m_view->getEvent();
 		eventsAnalyses(m_inputManager->eventProcessing(m_view->getEvent()));
+		imGuiEventsAnalyses(m_inputManager->imGuiEventProcessing(m_view->getImGuiEvent()));
 		//m_model->setIsRunning(false);
 	}
 }
@@ -52,6 +53,34 @@ void 		Controller::eventsAnalyses(Events const &ev)
 			mouseShift =  m_inputManager->getMouseShiftCoord();
 			m_model->cameraRotate(mouseShift.x, mouseShift.y);
 			break;
+		case Events::CHANGE_CAMERA_MOVE_MODE:
+			m_model->changeIsCameraMoveMode();
+		case Events::GRAVITY_ON:
+			m_model->setIsGravityActive(true);
+			m_model->setGravityCenter(m_inputManager->getXMouse(), m_inputManager->getYMouse(), m_view->getWidth(), m_view->getHeight());
+			break;
+		case Events::GRAVITY_OFF:
+			m_model->setIsGravityActive(false);
+			break;
+		case Events::SET_GRAVITY_CENTER:
+			m_model->setGravityCenter(m_inputManager->getXMouse(), m_inputManager->getYMouse(), m_view->getWidth(), m_view->getHeight());
+			break;
+		case Events::DROP_TO_DEFAULT_VIEW:
+			m_model->setDefaultView();
+		default:
+			break;
+	}
+}
+
+void 		Controller::imGuiEventsAnalyses(Events const & ev)
+{
+	switch (ev) {
+		case Events::PARTICLE_SYSTEM_CHANGE:
+			//m_model->setCurrentParticleSystem(static_cast<INIT_MESH>(m_view->getCurrentPs()));
+            break;
+        case Events::PARTICLES_NUMBERS_CHANGE:
+			//m_model->setCurrentParticleSystemNiumbers(m_view->getParticleCount());
+            break;
 		default:
 			break;
 	}

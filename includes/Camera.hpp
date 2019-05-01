@@ -36,19 +36,26 @@ public:
 	virtual ~Camera();
 
 	glm::mat4 const & 	getView() const {return m_view;};
+	glm::vec3 const & 	getDirection() const {return m_direction;};
+	glm::vec3 const & 	getRight() const {return m_right;};
+	glm::vec3 const & 	getUp() const {return m_up;};
+	glm::vec3 const & 	getPosition() const {return m_position;};
 	float 				getZoom() const {return m_zoom;};
 	void 				move(CameraChange ev,float const velocity);
 	void 				rotate(float const deltaYaw,float const deltaPitch);
+	void 				dropToDefaultCamera();
+	void 				changeIsCameraMoveMode() {m_isCameraMove = !m_isCameraMove;};
 private:
-	void 		calculateCameraVectors();
-	void 		calculateCameraDirection();
-	void 		calculateRightVector() {m_right = glm::normalize(glm::cross(m_direction, m_commonUp));};
-	void 		calculateUpVector() {m_up = glm::normalize(glm::cross(m_right, m_direction));};
-	void 		findView() {m_view = glm::lookAt(m_position, m_position + m_direction, m_up);};
-	void 		moveRight(float const velocity) {m_position += m_right * velocity; std::cout << "right" << velocity<<  std::endl;};
-	void 		moveLeft(float const velocity) {m_position += -m_right * velocity;};
-	void 		moveForward(float const velocity){m_position -= m_direction * velocity;};
-	void 		moveBackward(float const velocity){m_position += m_direction * velocity;};
+	void 				calculateCameraVectors();
+	void 				calculateCameraDirection();
+	void 				calculateRightVector() {m_right = glm::normalize(glm::cross(m_direction, m_commonUp));};
+	void 				calculateUpVector() {m_up = glm::normalize(glm::cross(m_right, m_direction));};
+	void 				findView() {m_view = glm::lookAt(m_position, m_position + m_direction, m_up);};
+	void 				moveRight(float const velocity) {m_position += m_right * velocity; std::cout << "right" << velocity<<  std::endl;};
+	void 				moveLeft(float const velocity) {m_position += -m_right * velocity;};
+	void 				moveForward(float const velocity){m_position -= m_direction * velocity;};
+	void 				moveBackward(float const velocity){m_position += m_direction * velocity;};
+
 
 	//void 		rotateAroundY(float velocity);
 	//void 		rotateAroundX(float velocity);
@@ -66,6 +73,7 @@ private:
     float 		m_pitch;
 	float 		m_zoom;
 
+	bool 		m_isCameraMove;
 	std::vector<void (Camera::*)(float const velocity)>      	m_moveFunc;
 
 

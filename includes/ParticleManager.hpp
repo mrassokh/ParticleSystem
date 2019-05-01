@@ -34,6 +34,12 @@ public:
 	ParticleSystems &			getParticleSystems() {return m_particleSystems;};
 	void 						startDrawPS(psType const type);
 	void 						draw(glm::mat4 const & projection, glm::mat4 const & view);
+	int & 						getCurrentParticleSystemCount(int n) {
+									if (n < m_particleSystems.size()) {
+										return m_particleSystems[n]->getParticleCount();
+									}
+									//return 0;
+								};
 
 
 private:
