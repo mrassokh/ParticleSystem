@@ -18,6 +18,7 @@
 #define PARTICLE_MANAGER_HPP
 #include "ParticleSystem.hpp"
 #include "ParticleSystemCreator.hpp"
+const int INIT_PARTICLE_COUNT =  1000000;
 
 typedef std::vector<psPtr> ParticleSystems;
 /*typedef std::map<psType, psInfo> ParticleInfoMap;
@@ -33,20 +34,26 @@ public:
 	void 						init();
 	ParticleSystems &			getParticleSystems() {return m_particleSystems;};
 	void 						startDrawPS(psType const type);
+	void 						startCurrentParticleSystem(INIT_MESH const type);
+	void 						stopCurrentParticleSystem(INIT_MESH const type);
+	void 						reinitCurrentParticleSystem(INIT_MESH const type, int const particleCount);
+	void 						updateCurrentParticleSystem(INIT_MESH const type);
+	psPtr						getCurrentParticleSystem(INIT_MESH const type) {return m_particleSystems[type];};
+
 	void 						draw(glm::mat4 const & projection, glm::mat4 const & view);
-	int & 						getCurrentParticleSystemCount(int n) {
-									if (n < m_particleSystems.size()) {
-										return m_particleSystems[n]->getParticleCount();
-									}
-									//return 0;
-								};
+	// int & 						getCurrentParticleSystemCount(int n) {
+	// 								if (n < m_particleSystems.size()) {
+	// 									return m_particleSystems[n]->getParticleCount();
+	// 								}
+	// 								//return 0;
+	// 							};
 
 
 private:
 	std::shared_ptr<CLEngine> 	m_CLE;
 	ParticleSystems				m_particleSystems;
 
-	void 						addParticleSystem(psType const type, psInfo const &info);
+	void 						addParticleSystem(psType const type, psInfo const &info,int const particleCount);
 };
 
 #endif

@@ -12,7 +12,8 @@
 
 #include "Model.hpp"
 
-Model::Model():m_mesh(S), m_isRunning(true),m_isGravityActive(false), m_gravityCenter(glm::vec3(0.0f,0.0f,0.0f))
+Model::Model():m_mesh(S), m_isRunning(true),m_isGravityActive(false), m_gravityCenter(glm::vec3(0.0f,0.0f,0.0f)),
+m_currentParticleCount(INIT_PARTICLE_COUNT)
 {
 	m_particleManager = std::make_unique<ParticleManager>();
 	glm::vec3 pos = glm::vec3(0.0f,0.0f,1.0f);
@@ -29,9 +30,9 @@ void 		Model::initModel()
 {
 	loadResources();
 	initParticleSystems();
-	float x = m_gravityCenter.x;
-	float y = m_gravityCenter.y;
-	float z = m_gravityCenter.z;
+	float x = 0;//m_gravityCenter.x;
+	float y = 0;//m_gravityCenter.y;
+	float z = 0;//m_gravityCenter.z;
 
 
 	GLfloat vertices[] = {
@@ -71,7 +72,7 @@ void 		Model::loadResources()
 void 		Model::initParticleSystems()
 {
 	m_particleManager->init();
-	m_particleManager->startDrawPS(SPHERE);
+	//m_particleManager->startDrawPS(SPHERE);
 }
 
 void 		Model::draw()
@@ -125,6 +126,12 @@ void   			Model::setDefaultView()
 {
 	dropToDefaultGravityCenter();
 	m_camera->dropToDefaultCamera();
+}
+
+void 			Model::restart()
+{
+	m_particleManager->reinitCurrentParticleSystem(m_mesh, m_currentParticleCount);
+	m_particleManager->startCurrentParticleSystem(m_mesh);
 }
 /*void 		Model::cameraRotate(const float deltaTime, float deltaX, float deltaY)
 {

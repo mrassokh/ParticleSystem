@@ -59,7 +59,7 @@ void 			ParticleSystemPoint::initGLBufers(std::string const & initKernelName)
 {
 	glFinish();
 	cl::Kernel kernel;
-
+	std::cout << "init gl buffer\n\n\n\n";
 	clearMemoryStack();
 	addGLBuffer(m_VBO);
 

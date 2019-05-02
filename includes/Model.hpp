@@ -20,6 +20,13 @@
 #include "Camera.hpp"
 
 
+struct imGuiInfo {
+	int 	 	ps;
+	int 	 	prev_ps;
+	int 		particle_count;
+	int 		prev_particle_count;
+};
+
 
 typedef std::unique_ptr<ParticleManager> particleManager;
 typedef std::unique_ptr<Camera> cameraPtr;
@@ -27,6 +34,7 @@ typedef std::unique_ptr<Camera> cameraPtr;
 const float MOVE_SPEED       =  1.1f;
 const float MOUSE_SENSITIVITY =  0.3f;
 const float DISTANCE_FROM_CAMERA_TO_GRAVITY_PLANE =  1.0f;
+
 
 class Model : public Observable {
 public:
@@ -55,8 +63,13 @@ public:
 	void   				setGravityCenter(int mouseX, int mouseY, int width, int height);// {m_isGravityActive = isGravity};
 	void 				dropToDefaultGravityCenter();
 	void   				setDefaultView();
+	void 				start() {m_particleManager->startCurrentParticleSystem(m_mesh);};
+	void 				stop() {m_particleManager->stopCurrentParticleSystem(m_mesh);};
+	void 			restart();
+	void 				setCurrentParticleSystem(INIT_MESH ps){m_mesh = ps;};
+	void				setCurrentParticleSystemNumbers(int numbers) {m_currentParticleCount = numbers;};
 	void 				changeIsCameraMoveMode(){m_camera->changeIsCameraMoveMode();};
-	int & 				getCurrentParticleSystemCount() {m_particleManager->getCurrentParticleSystemCount(m_mesh);};
+	//int & 				getCurrentParticleSystemCount() {m_particleManager->getCurrentParticleSystemCount(m_mesh);};
 
 
 	GLuint VBO;
@@ -75,6 +88,7 @@ private:
 	glm::vec3			m_gravityCenter;
 	particleManager 	m_particleManager;
 	cameraPtr			m_camera;
+	int 				m_currentParticleCount;
 };
 
 #endif /* end of include guard:MODEL_HPP */

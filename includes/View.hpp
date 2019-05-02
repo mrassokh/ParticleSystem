@@ -28,15 +28,12 @@
 enum imGuiEvent {
 	DEFAULT,
 	PARTICLE_SYSTEM_CHANGE,
-	PARTICLES_NUMBERS_CHANGE
+	PARTICLES_NUMBERS_CHANGE,
+	START,
+	STOP,
+	RESTART_WITH_NEW_PARTICLE_NUMBER
 };
 
-struct imGuiInfo {
-	int 	 		ps;
-	int 	 	 	prev_ps;
-	int 			particle_count;
-	int 			prev_particle_count;
-};
 
 class View : public Observer {
 public:
@@ -81,5 +78,10 @@ private:
 	Uint64          	m_curTime;
     Uint64          	m_lastTime;
 	float           	m_deltaTime;
+	float				m_FPS;
+	float				m_FPS_inc;
+	int					tick_counter;
+	float				m_second;
+
 };
 #endif /* end of include guard: VIEW_HPP */

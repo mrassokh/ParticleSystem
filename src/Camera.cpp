@@ -35,8 +35,10 @@ Camera::~Camera()
 
 void 		Camera::move(CameraChange ev,float const velocity)
 {
+
 	if (!m_isCameraMove)
 		return;
+		std::cout << ev << "with velocity " << velocity << std::endl;
 	(this->*m_moveFunc[ev])(velocity);
 	findView();
 }

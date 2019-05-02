@@ -12,7 +12,7 @@
 
 #include "ParticleSystem.hpp"
 
-ParticleSystem::ParticleSystem(): m_initKernelName(""), m_particleCount(particleCount),
+ParticleSystem::ParticleSystem(): m_initKernelName(""), 
 									m_startTime(std::chrono::high_resolution_clock::now()),
 									m_stepTime(std::chrono::high_resolution_clock::now()),
  									m_deltaTime(0.0f),
@@ -134,4 +134,9 @@ void 		ParticleSystem::setInitKernelName(std::string const & initName)
 void 		ParticleSystem::setUpdateKernelName(std::string const & updateName)
 {
 	m_updateKernelName = updateName;
+}
+
+void 		ParticleSystem::stop()
+{
+	m_isRunning = false;
 }

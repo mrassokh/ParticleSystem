@@ -33,16 +33,16 @@ ParticleSystemCreator::~ParticleSystemCreator()
 }
 
 
-psPtr 	ParticleSystemCreator::createParticleSystem(psType type, clePtr clEngine, psInfo const & info) const
+psPtr 	ParticleSystemCreator::createParticleSystem(psType type, clePtr clEngine, psInfo const & info, int const particleCount) const
 
 {
-	return (this->*m_createFunctions[type])(clEngine, info);
+	return (this->*m_createFunctions[type])(clEngine, info, particleCount);
 }
 
-psPtr 	ParticleSystemCreator::createParticleSystemPoint(clePtr clEngine, psInfo const & info) const
+psPtr 	ParticleSystemCreator::createParticleSystemPoint(clePtr clEngine, psInfo const & info, int const particleCount) const
 {
-	psPtr psPoint = std::shared_ptr<ParticleSystem>(new ParticleSystemPoint());
-	initParticleSystem(psPoint, clEngine, info);
+	psPtr psPoint = std::make_shared<ParticleSystemPoint>();//std::shared_ptr<ParticleSystem>(new ParticleSystemPoint());
+	initParticleSystem(psPoint, clEngine, info, particleCount);
 	return psPoint;
 }
 
@@ -62,9 +62,10 @@ psPtr 	ParticleSystemCreator::createParticleSystemBrick(clePtr clEngine, psInfo 
 	return psQuad;
 }*/
 
-void 	ParticleSystemCreator::initParticleSystem(psPtr particleSystem, clePtr clEngine, psInfo const & info) const
+void 	ParticleSystemCreator::initParticleSystem(psPtr particleSystem, clePtr clEngine, psInfo const & info, int const particleCount) const
 {
 	particleSystem->setCLEngine(clEngine);
+	particleSystem->setParticleCount(particleCount);
 	particleSystem->setCLContext();
 	particleSystem->setShader(info.shaderName);
 	particleSystem->setInitKernelName(info.initName);

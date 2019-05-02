@@ -15,7 +15,7 @@
 
 
 
-View::View(Model *model) : m_mesh(S), m_width(WIN_X), m_height(WIN_Y), m_head (""),m_model(model)
+View::View(Model *model) : m_mesh(S), m_width(WIN_X), m_height(WIN_Y), m_head (""),m_model(model), m_second(0.0f)
 {
 	initView();
 	m_model->addObserver(this);
@@ -45,7 +45,7 @@ void 		View::initView()
 	initOpenGL();
 	m_imGuiInfo.ps = S;
 	m_imGuiInfo.prev_ps = m_imGuiInfo.ps;
-	m_imGuiInfo.particle_count = 1000000;
+	m_imGuiInfo.particle_count = INIT_PARTICLE_COUNT;
 	m_imGuiInfo.prev_particle_count = m_imGuiInfo.particle_count;
 	m_imGuiEvent = imGuiEvent::DEFAULT;
 }
@@ -93,7 +93,7 @@ void 	View::initImGui() {
     IMGUI_CHECKVERSION();
 
     ImGui::CreateContext();
-    ImGuiIO &io = ImGui::GetIO();
+    //ImGuiIO &io = ImGui::GetIO();
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
     ImGui_ImplSdlGL3_Init(m_window);
 
@@ -105,15 +105,22 @@ void 	View::initImGui() {
 void 		View::drawImGui()
 {
 	ImGui_ImplSdlGL3_NewFrame(m_window);
-		ImGui::SetNextWindowSize(WIN_SIZE, ImGuiSetCond_FirstUseEver);
+	std::cout<<"DRAW IM GUI!!!\n\n\n";
+		//ImGui::SetNextWindowSize(ImVec2(650, 20), ImGuiSetCond_FirstUseEver);
 			ImGui::SetNextWindowPos({0, 0},0);
 			ImGui::SetNextWindowBgAlpha(0.7f);
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(100,100));
-			ImGui::Begin("Menu");
-			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 20));
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(10,10));
+			//if (ImGui::BeginMenuBar()){
+			//	ImGui::RadioButton("SPHERE", &m_imGuiInfo.ps, S);
+
+			//if(ImGui::Begin("Menu"))//{
+				ImGui::Begin("Menu");
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, 10));
 			//ImGui::Text("Welcome to BomberMan game!");
 			//ImGui::SliderInt("particles number", &m_model->getCurrentParticleSystemCount(), 100000, 3000000);
-			ImGui::SliderInt("particles number", &m_imGuiInfo.particle_count, 100000, 3000000);
+			ImGui::Text("FPS: %f", m_FPS);
+			ImGui::Text("Particles number!");
+			ImGui::SliderInt("", &m_imGuiInfo.particle_count, 100000, 3000000);
 
 			ImGui::RadioButton("SPHERE", &m_imGuiInfo.ps, S);
 			ImGui::RadioButton("CUBE", &m_imGuiInfo.ps, C);
@@ -127,8 +134,8 @@ void 		View::drawImGui()
 
 			//ImGui::Separator();
 
-			const ImVec2 menu_frame = {200, 120};
-			const float spacing = 10;
+			//const ImVec2 menu_frame = {200, 120};
+			//const float spacing = 10;
 			//ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10, spacing));
 			//ImGui::BeginChildFrame(1, menu_frame, 4);
 
@@ -140,13 +147,30 @@ void 		View::drawImGui()
 
 			/////////////////////////////////EXIT////////////////////////////////////
 
-			//ImGui::Button("EXIT", STANDARD_MENU_BUTTON);
+			//ImGui::Button("START", STANDARD_MENU_BUTTON);
+
+			if (ImGui::Button("START", STANDARD_MENU_BUTTON))
+			{
+				m_imGuiEvent = imGuiEvent::START;
+			}
+			if (ImGui::Button("STOP", STANDARD_MENU_BUTTON))
+			{
+				m_imGuiEvent = imGuiEvent::STOP;
+			}
+			if (ImGui::Button("RESTART", STANDARD_MENU_BUTTON))
+			{
+				m_imGuiEvent = imGuiEvent::RESTART_WITH_NEW_PARTICLE_NUMBER;
+			}
 
 //ImGui::Text("MovableEntity setting:");
 			//ImGui::EndChildFrame();
 			//ImGui::PopStyleVar();
 			ImGui::PopStyleVar();
 			ImGui::End();
+		//}
+
+		/*	ImGui::EndMenuBar();
+	}*/
 			ImGui::PopStyleVar();
 
 		ImGui::Render();
@@ -155,6 +179,7 @@ void 		View::drawImGui()
 void 		View::draw()
 {
 	defineDeltaTime();
+
 	//std::cout << "View deltatime is " << m_deltaTime;
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -163,15 +188,17 @@ void 		View::draw()
 	 m_model->draw();
 	 m_model->m_shader->use();
 	 m_model->m_shader->setMat4("view", m_model->getCameraView());
-	// m_model->m_shader->setMat4("view", m_model->view);
+	//m_model->m_shader->setMat4("view", m_model->view);
  	m_model->m_shader->setMat4("projection", m_projection);
 	glBindVertexArray(m_model->VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 	glBindVertexArray(0);
 
-	drawImGui();
-	SDL_PollEvent(&m_event);
 	imGuiPollEvent();
+	drawImGui();
+
+	SDL_PollEvent(&m_event);
+
 	SDL_GL_SwapWindow(m_window);
 }
 
@@ -180,6 +207,18 @@ void 		View::defineDeltaTime()
 	m_lastTime = m_curTime;
 	m_curTime = SDL_GetPerformanceCounter();
 	m_deltaTime = (m_curTime - m_lastTime) / static_cast<float>(SDL_GetPerformanceFrequency());
+
+	if (m_second < 1.0f){
+		m_second += m_deltaTime;
+		m_FPS_inc += 1 / m_deltaTime;
+		//m_FPS_sum  += m_FPS;
+		tick_counter++;
+	} else {
+		m_FPS = m_FPS_inc / tick_counter;
+		m_FPS_inc = 0.0f;
+		tick_counter = 0;
+		m_second = 0.0f;
+	}
 }
 
 void 		View::imGuiPollEvent()

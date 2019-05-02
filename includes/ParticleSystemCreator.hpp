@@ -27,7 +27,7 @@ class ParticleSystemCreator {
 public:
 	static ParticleSystemCreator & getInstance();
 
-	psPtr 	createParticleSystem(psType type, clePtr clEngine, psInfo const & info) const;
+	psPtr 	createParticleSystem(psType type, clePtr clEngine, psInfo const & info, int const particleCount) const;
 
 private:
 	ParticleSystemCreator();
@@ -35,12 +35,12 @@ private:
 	ParticleSystemCreator & operator = (ParticleSystemCreator const & ) = delete;
 	virtual ~ParticleSystemCreator();
 
-	psPtr 	createParticleSystemPoint(clePtr clEngine, psInfo const & info) const;
+	psPtr 	createParticleSystemPoint(clePtr clEngine, psInfo const & info, int const particleCount) const;
 	/*psPtr 	createParticleSystemQuad(clePtr clEngine, psInfo const & info) const;
 	psPtr 	createParticleSystemBrick(clePtr clEngine, psInfo const & info) const;*/
-	void 	initParticleSystem(psPtr particleSystem, clePtr clEngine, psInfo const & info) const;
+	void 	initParticleSystem(psPtr particleSystem, clePtr clEngine, psInfo const & info, int const particleCount) const;
 
 	std::vector<psPtr (ParticleSystemCreator::*)
-					(clePtr clEngine, psInfo const & info) const>	m_createFunctions;
+					(clePtr clEngine, psInfo const & info, int const particleCount) const>	m_createFunctions;
 };
 #endif
