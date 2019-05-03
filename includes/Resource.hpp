@@ -49,11 +49,12 @@ public:
 	void 		initParticleInfo(psType type, std::string const & initName, std::string const & updateName,
 											std::string const & shaderName, std::string const & textureName, float const liveTime);
 
+	virtual ~Resource();
 private:
 	Resource();
-	Resource(Resource const &) = delete;
-	Resource operator = (Resource const &) = delete;
-	virtual ~Resource();
+	//Resource(Resource const &) = delete;
+	//Resource operator = (Resource const &) = delete;
+
 
 	clePtr 						m_CLEngine;
 	shadersMap 					m_shaderMap;

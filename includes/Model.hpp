@@ -65,7 +65,7 @@ public:
 	void   				setDefaultView();
 	void 				start() {m_particleManager->startCurrentParticleSystem(m_mesh);};
 	void 				stop() {m_particleManager->stopCurrentParticleSystem(m_mesh);};
-	void 			restart();
+	void 				restart();
 	void 				setCurrentParticleSystem(INIT_MESH ps){m_mesh = ps;};
 	void				setCurrentParticleSystemNumbers(int numbers) {m_currentParticleCount = numbers;};
 	void 				changeIsCameraMoveMode(){m_camera->changeIsCameraMoveMode();};

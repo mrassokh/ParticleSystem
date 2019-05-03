@@ -14,7 +14,9 @@
 
 ParticleManager::ParticleManager()
 {
+	std::cout << "ParticleManager()" << std::endl;
 	m_CLE = std::shared_ptr<CLEngine>(CLEngine::getInstance());
+	std::cout << "m_CLE : " << m_CLE.get() << std::endl;
 }
 
 
@@ -30,6 +32,7 @@ void 		ParticleManager::init()
 		for (auto & infoElement : infoMap) {
 			auto type = infoElement.first;
 			auto info = infoElement.second;
+			//addParticleSystem(type, info, INIT_PARTICLE_COUNT);
 			addParticleSystem(type, info, INIT_PARTICLE_COUNT);
 		}
 	} catch (CustomException &ex) {
@@ -109,7 +112,9 @@ void 				ParticleManager::reinitCurrentParticleSystem(INIT_MESH const type, int 
 	ps->stop();
 	ps->clearMemoryStack();
 	ps->setParticleCount(particleCount);
+		std::cout<< " RESOURCE.getParticleInfo\n";
 	auto info = RESOURCE.getParticleInfo(static_cast<psType>(type));
+	ps->createGLBufers();
 	ps->initGLBufers(info.initName);
 
 	/*std::cout << "CURRENT POINTER is \n\n\n\n\n"<< ps.get() << std::endl;

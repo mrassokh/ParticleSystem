@@ -12,7 +12,7 @@
 
 #include "ParticleSystem.hpp"
 
-ParticleSystem::ParticleSystem(): m_initKernelName(""), 
+ParticleSystem::ParticleSystem(): m_initKernelName(""),
 									m_startTime(std::chrono::high_resolution_clock::now()),
 									m_stepTime(std::chrono::high_resolution_clock::now()),
  									m_deltaTime(0.0f),

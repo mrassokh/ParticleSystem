@@ -18,6 +18,7 @@
 #define PARTICLE_MANAGER_HPP
 #include "ParticleSystem.hpp"
 #include "ParticleSystemCreator.hpp"
+#include "Resource.hpp"
 const int INIT_PARTICLE_COUNT =  1000000;
 
 typedef std::vector<psPtr> ParticleSystems;

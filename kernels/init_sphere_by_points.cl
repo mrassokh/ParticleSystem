@@ -1,4 +1,4 @@
-#define GAME_QUAD_SIZE	1000.5f
+#define GAME_QUAD_SIZE	1.5f
 #define SPHERE_RADIUS	GAME_QUAD_SIZE / 5
 #define NULITY	(float4)(0.0f, 0.0f, 0.0f, 0.0f)
 #define INF	(float4)(10000.0f, 10000.0f, 10000.0f, 1.0f)
@@ -10,8 +10,9 @@ typedef struct
 	float4	color;
 }			Particle;
 
-void kernel initialize_sphere(global Particle * particles, int particleCount)
+void kernel initialize_sphere(global Particle * particles, int particleCount)//, global Particle * out)
 {
+
 	int				i = get_global_id(0);
 	global float4 *	position = &(particles[i].position);
 
@@ -37,4 +38,5 @@ void kernel initialize_sphere(global Particle * particles, int particleCount)
 
 	particles[i].velocity = (float4)(0.0f, 0.0f, 0.0f, 0.0f);
 	particles[i].color = (float4)(1.0f, 0.8f, 0.0f, 1.0f);
+	//out[i] = particles[i];
 }

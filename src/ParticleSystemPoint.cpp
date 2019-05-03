@@ -59,21 +59,30 @@ void 			ParticleSystemPoint::initGLBufers(std::string const & initKernelName)
 {
 	glFinish();
 	cl::Kernel kernel;
-	std::cout << "init gl buffer\n\n\n\n";
+	std::cout << "init gl buffer" << initKernelName << "\n\n\n\n";
 	clearMemoryStack();
 	addGLBuffer(m_VBO);
 
 	m_CLE->getKernel(initKernelName, kernel);
 	auto commandQueue = m_CLE->getCommandQueue();
 	commandQueue.enqueueAcquireGLObjects(&m_memory);
-
+	//cl::Buffer buffer_C(m_CLE->getContext(), CL_MEM_READ_WRITE, sizeof(Particle) * m_particleCount);
+	//Particle C[m_particleCount];
 	kernel.setArg(0, m_memory.front());
 	kernel.setArg(1, m_particleCount);
+	//kernel.setArg(1, buffer_C);
+
 
 	commandQueue.enqueueNDRangeKernel(kernel, cl::NullRange, cl::NDRange(m_particleCount), cl::NullRange);
+	//commandQueue.enqueueReadBuffer(buffer_C, CL_TRUE, 0, sizeof(Particle) * m_particleCount, C);
 	commandQueue.finish();
 	commandQueue.enqueueReleaseGLObjects(&m_memory);
 	cl::finish();
+	/*for (int i =0; i < m_particleCount; ++i) {
+		std::cout << "particle " << i << "has position" << C[i].position.x << " / " << C[i].position.y << " / "<< C[i].position.z << " / "<< C[i].position.w<<  std::endl;
+		std::cout << "particle " << i << "has color" << C[i].color.x << " / " << C[i].color.y << " / "<< C[i].color.z << " / "<< C[i].color.w << std::endl;
+		std::cout << "particle " << i << "has velocity" << C[i].velocity.x << " / " << C[i].velocity.y << " / "<< C[i].velocity.z << " / "<< C[i].velocity.w <<std::endl;
+	}*/
 }
 
 void 			ParticleSystemPoint::updateGLBufers(std::string const & updateKernelName)
@@ -82,7 +91,7 @@ void 			ParticleSystemPoint::updateGLBufers(std::string const & updateKernelName
 
 	cl::Kernel kernel;
 	m_CLE->getKernel(updateKernelName, kernel);
-	std::cout << "update with " << updateKernelName;
+	std::cout << "update with " << updateKernelName << "and particle count " << m_particleCount;
 	auto commandQueue = m_CLE->getCommandQueue();
  	commandQueue.enqueueAcquireGLObjects(&m_memory);
 	kernel.setArg(0, m_memory.front());
@@ -111,7 +120,8 @@ void 			ParticleSystemPoint::drawGLContent(glm::mat4 const & projection, glm::ma
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glBindVertexArray(m_VAO);
-    glDrawArraysInstanced(GL_POINTS, 0, m_particleCount, transforms.size());
+    //glDrawArraysInstanced(GL_POINTS, 0, m_particleCount, transforms.size());
+	glDrawArrays(GL_POINTS, 0, m_particleCount);
     glBindVertexArray(0);
 	glDisable(GL_BLEND);
 	glFinish();

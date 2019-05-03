@@ -29,6 +29,7 @@
 #include <fstream>
 #include <cassert>
 #include "CustomExceptions.hpp"
+#include <stdlib.h>
 
 typedef std::map<std::string, cl::Program::Sources> programSources;
 typedef std::map<std::string, cl::Program> programs;

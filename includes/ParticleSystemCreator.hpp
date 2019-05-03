@@ -36,6 +36,7 @@ private:
 	virtual ~ParticleSystemCreator();
 
 	psPtr 	createParticleSystemPoint(clePtr clEngine, psInfo const & info, int const particleCount) const;
+	psPtr   createParticleSystemCube(clePtr clEngine, psInfo const & info, int const particleCount) const;
 	/*psPtr 	createParticleSystemQuad(clePtr clEngine, psInfo const & info) const;
 	psPtr 	createParticleSystemBrick(clePtr clEngine, psInfo const & info) const;*/
 	void 	initParticleSystem(psPtr particleSystem, clePtr clEngine, psInfo const & info, int const particleCount) const;
