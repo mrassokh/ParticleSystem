@@ -18,9 +18,9 @@ void Observable::addObserver(Observer * observer)
 	m_observers.push_back(observer);
 }
 
-void Observable::notifyChangeMesh(INIT_MESH mesh)
+void Observable::notifyChangeMesh(psType type)
 {
   for (auto &obs : m_observers) {
-	 	obs->changeMesh(mesh);
+	 	obs->changeMesh(type);
   }
 }

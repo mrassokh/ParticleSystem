@@ -102,7 +102,6 @@ Events InputManager::mouseButtonProcessing(SDL_MouseButtonEvent const &ev, bool 
         default:
             break;
     }
-	//return Events::DEFAULT;
 }
 
 Events 		InputManager::imGuiEventProcessing(imGuiEvent ev)
@@ -114,13 +113,10 @@ Events 		InputManager::imGuiEventProcessing(imGuiEvent ev)
         case imGuiEvent::PARTICLES_NUMBERS_CHANGE:
             return Events::PARTICLES_NUMBERS_CHANGE;
 		case imGuiEvent::START:
-			std::cout << "Start event processed\n";
 			return Events::START;
 		case imGuiEvent::STOP:
-			std::cout << "Stop event processed\n";
 			return Events::STOP;
 		case imGuiEvent::RESTART_WITH_NEW_PARTICLE_NUMBER:
-			std::cout << "RESTART_WITH_NEW_PARTICLE_NUMBER event processed\n";
 			return Events::RESTART_WITH_NEW_PARTICLE_NUMBER;
 		default:
 			return Events::DEFAULT;

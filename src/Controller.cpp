@@ -21,12 +21,10 @@ void 		Controller::liveCycle()
 {
 	while (m_model->getIsRunning())
 	{
-		//m_model->draw();
+		m_model->update();
 		m_view->draw();
-		//const SDL_Event e = m_view->getEvent();
 		eventsAnalyses(m_inputManager->eventProcessing(m_view->getEvent()));
 		imGuiEventsAnalyses(m_inputManager->imGuiEventProcessing(m_view->getImGuiEvent()));
-		//m_model->setIsRunning(false);
 	}
 }
 
@@ -54,7 +52,6 @@ void 		Controller::eventsAnalyses(Events const &ev)
 			m_model->cameraRotate(mouseShift.x, mouseShift.y);
 			break;
 		case Events::CHANGE_CAMERA_MOVE_MODE:
-			std::cout << "CHANGE_CAMERA_MOVE_MODE\n";
 			m_model->changeIsCameraMoveMode();
 			break;
 		case Events::GRAVITY_ON:
@@ -69,9 +66,6 @@ void 		Controller::eventsAnalyses(Events const &ev)
 			break;
 		case Events::DROP_TO_DEFAULT_VIEW:
 			m_model->setDefaultView();
-		/*case Events::RESTART_WITH_NEW_PARTICLE_NUMBER:
-				//std::cout << "model restart simulation\n";
-			m_model->restart();*/
 			break;
 		default:
 			break;
@@ -80,25 +74,21 @@ void 		Controller::eventsAnalyses(Events const &ev)
 
 void 		Controller::imGuiEventsAnalyses(Events const & ev)
 {
-	//std::cout << "Hello IMGui!!!\n";
 	switch (ev) {
 		case Events::PARTICLE_SYSTEM_CHANGE:
-			m_model->setCurrentParticleSystem(static_cast<INIT_MESH>(m_view->getCurrentPs()));
+			m_model->setCurrentParticleSystem(m_view->getCurrentPs());
             break;
         case Events::PARTICLES_NUMBERS_CHANGE:
 			m_model->setCurrentParticleSystemNumbers(m_view->getParticleCount());
             break;
 		case Events::START:
-			std::cout << "model start simulation\n";
 			m_model->start();
 			break;
 		case Events::STOP:
-			std::cout << "model stop simulation\n";
 			m_model->stop();
 			break;
 		case Events::RESTART_WITH_NEW_PARTICLE_NUMBER:
-			//std::cout << "model restart simulation\n";
-			m_model->restart();
+			m_model->reinit();
 			break;
 		default:
 			break;

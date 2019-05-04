@@ -1,4 +1,4 @@
-#define GAME_QUAD_SIZE	0.5f
+#define GAME_QUAD_SIZE	1.5f
 #define MAX_SPHERE_RADIUS GAME_QUAD_SIZE
 #define INF	(float4)(10000.0f, 10000.0f, 10000.0f, 1.0f)
 #define NULITY	(float4)(0.0f, 0.0f, 0.0f, 0.0f)
@@ -12,19 +12,12 @@ typedef struct
 	float4	color;
 }			Particle;
 
-void kernel update_sphere(global Particle * particles, float deltaTime) {
-return;
+void kernel update_Cube(global Particle * particles, float deltaTime) {
 	int				i = get_global_id(0);
 
 	global Particle *	particle = particles + i;
 
-	//particle->color.x /= (1 + 0.004f);
-	//particle->color.y /= (1 + 0.005f );
-	//particle->color.w /= (1 +  0.004f);
-	//particle->velocity = particle->position;
-	particle->position += particle->velocity * deltaTime;
-
-	/*if (particle->position.x == 10000.0f)
+	if (particle->position.x == 10000.0f)
 		return;
 	float dist = length(particle->position);
 
@@ -33,7 +26,6 @@ return;
 		particles->velocity = NULITY;
 		return;
 	}
-
 
 	float parDist_0 =  (MAX_SPHERE_RADIUS - dist) * DIV;
 	float parDist_1 =  dist * DIV;
@@ -45,5 +37,5 @@ return;
 	particle->color.x /= (1 + 0.4f * squareParDist_1);
 	particle->color.y /= (1 + 1.5f * squareParDist_1);
 	particle->color.w /= (1 +  0.4f * squareParDist_1);
-	particle->position += particle->velocity * deltaTime ;*/
+	particle->position += particle->velocity * deltaTime ;
 };

@@ -15,7 +15,7 @@
 
 
 
-View::View(Model *model) : m_mesh(S), m_width(WIN_X), m_height(WIN_Y), m_head (""),m_model(model), m_second(0.0f)
+View::View(Model *model) : m_type(SPHERE), m_width(WIN_X), m_height(WIN_Y), m_head (""),m_model(model), m_second(0.0f)
 {
 	initView();
 	m_model->addObserver(this);
@@ -26,9 +26,9 @@ View::~View()
 {
 
 }
-void View::changeMesh(INIT_MESH mesh)
+void View::changeMesh(psType type)
 {
-	m_mesh = mesh;
+	m_type = type;
 }
 
 
@@ -43,11 +43,13 @@ void 		View::initView()
 	SDL_SetWindowResizable(m_window, SDL_TRUE);
 	initImGui();
 	initOpenGL();
-	m_imGuiInfo.ps = S;
+	m_imGuiInfo.ps = SPHERE;
 	m_imGuiInfo.prev_ps = m_imGuiInfo.ps;
 	m_imGuiInfo.particle_count = INIT_PARTICLE_COUNT;
 	m_imGuiInfo.prev_particle_count = m_imGuiInfo.particle_count;
 	m_imGuiEvent = imGuiEvent::DEFAULT;
+	m_drawPs.push_back(&View::drawPointPS);
+	m_drawPs.push_back(&View::drawPointPS);
 }
 
 void 		View::initSDL()
@@ -106,8 +108,8 @@ void 		View::drawImGui()
 	ImGui::Text("FPS: %f", m_FPS);
 	ImGui::Text("Particles number!");
 	ImGui::SliderInt("", &m_imGuiInfo.particle_count, 100000, 3000000);
-	ImGui::RadioButton("SPHERE", &m_imGuiInfo.ps, S);
-	ImGui::RadioButton("CUBE", &m_imGuiInfo.ps, C);
+	ImGui::RadioButton("SPHERE", &m_imGuiInfo.ps, SPHERE);
+	ImGui::RadioButton("CUBE", &m_imGuiInfo.ps, CUBE);
 	if (ImGui::Button("START", STANDARD_MENU_BUTTON))
 	{
 		m_imGuiEvent = imGuiEvent::START;
@@ -135,7 +137,8 @@ void 		View::draw()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	 glViewport(0, 0, m_width, m_height);
 	 m_projection = glm::perspective(glm::radians(m_model->getCameraZoom()), static_cast<float>(m_width) / static_cast<float>(m_height), 0.1f, 100.0f);
-	 m_model->draw();
+	 drawPS(m_projection);
+	 //m_model->draw();
 	// m_model->m_shader->use();
 	// m_model->m_shader->setMat4("view", m_model->getCameraView());
 	//m_model->m_shader->setMat4("view", m_model->view);
@@ -150,6 +153,14 @@ void 		View::draw()
 	SDL_PollEvent(&m_event);
 
 	SDL_GL_SwapWindow(m_window);
+}
+
+void 		View::drawPS(glm::mat4 const & projection)
+{
+	std::vector<glm::mat4> transforms;
+	glm::mat4 model = glm::mat4(1.0f);
+	transforms.push_back(model);
+	(this->*m_drawPs[m_type])(m_model->getCurrentParticleSystem(), projection, m_model->getCameraView(), transforms);
 }
 
 void 		View::defineDeltaTime()
@@ -185,4 +196,29 @@ void 		View::imGuiPollEvent()
 		m_imGuiEvent = imGuiEvent::PARTICLES_NUMBERS_CHANGE;
 		return;
 	}
+}
+
+void 		View::drawPointPS(psPtr & particleSystem, glm::mat4 const & projection, glm::mat4  const & view, std::vector<glm::mat4> const & transforms)
+{
+	auto shader = particleSystem->getShader();
+	if (!shader)
+		throw CustomException("Shader for particle system is not defined!");
+
+	shader->use();
+	shader->setMat4("projection", projection);
+	shader->setMat4("view", view);
+	std::cout << "drawGLContent \n ";
+	//	printf("drawGLContent \n");
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBindBuffer(GL_ARRAY_BUFFER, particleSystem->getIBO());
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * transforms.size(), &transforms[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glBindVertexArray(particleSystem->getVAO());
+	glDrawArraysInstanced(GL_POINTS, 0, particleSystem->getParticleCount(), transforms.size());
+	//glDrawArrays(GL_POINTS, 0, particleSystem->getParticleCount());
+	glBindVertexArray(0);
+	glDisable(GL_BLEND);
+	glFinish();
 }

@@ -32,23 +32,6 @@ struct Particle
 	cl_float4	color;
 };
 
-struct QuadParticle : Particle
-{
- 	cl_float2	uv;
-};
-
-
-struct Quad
-{
- 	QuadParticle particle[6];
-};
-
-struct Brick
-{
- 	Quad quad[6];
-};
-
-
 const int particleCount = 1000000;
 typedef std::chrono::time_point<std::chrono::high_resolution_clock>	t_point;
 
@@ -63,6 +46,9 @@ public:
 	std::string const & 		getUpdateKernelName() const;
 	int &						getParticleCount() {return m_particleCount;};
 	float &						getLiveTime() {return m_liveTime;};
+	GLuint 						getVAO() {return m_VAO;};
+	GLuint 						getIBO() {return m_IBO;};
+	std::shared_ptr<Shader> & 	getShader() {return m_shader;};
 	void 						setInitKernelName(std::string const & initName);
 	void 						setUpdateKernelName(std::string const & updateName);
 
@@ -96,7 +82,6 @@ protected:
 	std::string					m_updateKernelName;
 	cl::Context 				m_context;
 	std::vector<cl::Memory> 	m_memory;
-	//std::shared_ptr<Texture>  	m_texture;
 
 	GLuint 						m_VBO;
 	GLuint 						m_VAO;

@@ -12,19 +12,17 @@
 
 #include "Model.hpp"
 
-Model::Model():m_mesh(S), m_isRunning(true),m_isGravityActive(false), m_gravityCenter(glm::vec3(0.0f,0.0f,0.0f)),
-m_currentParticleCount(3)//m_currentParticleCount(INIT_PARTICLE_COUNT)
+Model::Model():m_type(SPHERE), m_isRunning(true),m_isGravityActive(false),
+ 				m_gravityCenter(glm::vec3(0.0f,0.0f,0.0f)), m_currentParticleCount(INIT_PARTICLE_COUNT)
 {
-	//sm_particleManager = std::make_unique<ParticleManager>();
-
 	glm::vec3 pos = glm::vec3(0.0f,0.0f,1.0f);
 	m_camera = std::make_unique<Camera>(pos, -90.0f, 0.0f, 90.0f);
 }
 
-void 		Model::setMesh(INIT_MESH mesh)
+void 		Model::setMesh(psType const type)
 {
-	m_mesh = mesh;
-	notifyChangeMesh(mesh);
+	m_type = type;
+	notifyChangeMesh(type);
 }
 
 void 		Model::initModel()
@@ -32,29 +30,6 @@ void 		Model::initModel()
 	loadResources();
 	m_particleManager = std::make_unique<ParticleManager>();
 	initParticleSystems();
-	float x = 0;//m_gravityCenter.x;
-	float y = 0;//m_gravityCenter.y;
-	float z = 0;//m_gravityCenter.z;
-
-
-	GLfloat vertices[] = {
-	    -0.5f + x, -0.5f + y, 0.0f + z,
-	     0.5f + x, -0.5f + y, 0.0f + z,
-	     0.0f + x,  0.5f + y, 0.0f + z
-	};
-
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-
-	glBindVertexArray(VAO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-glEnableVertexAttribArray(0);
-glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-glBindVertexArray(0);
-
 }
 
 void 		Model::loadResources()
@@ -74,40 +49,11 @@ std::cout<< "p2\n";
 		std::cout << ex.what() << std::endl;
 		exit(42);
 	}
-	m_shader = RESOURCE.getShader("point_shader");
 }
 
 void 		Model::initParticleSystems()
 {
 	m_particleManager->init();
-	//m_particleManager->startDrawPS(SPHERE);
-}
-
-void 		Model::draw()
-{
-	glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f,  10.0f);
-	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-	glm::vec3 pointTo = glm::vec3(0.0f, 0.0f, -1.0f);
-	glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
-	//glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-	view = glm::lookAt(cameraPos, pointTo, cameraUp);
-	projection = glm::perspective(glm::radians(getCameraZoom()), static_cast<float>(80) / static_cast<float>(60), 0.1f, 100.0f);
-	/*m_shader->use();
-	m_shader->setMat4("view", view);
-	m_shader->setMat4("projection", projection);
-	glBindVertexArray(VAO);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-	glBindVertexArray(0);*/
-
-	//glm::mat4 groundModel = glm::mat4(1.0f);
-	//std::vector<glm::mat4> transforms;
-	//transforms.push_back(groundModel);
-	/*glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f,  0.0f);
-	glm::vec3 cameraFront = glm::vec3(1.0f, 1.0f, -1.0f);
-	glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
-	glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-	glm::mat4 projection = glm::perspective(glm::radians(45.3f), static_cast<float>(800) / static_cast<float>(600), 0.1f, 10.0f);*/
-	m_particleManager->draw(projection, this->getCameraView());
 }
 
 void   			Model::setGravityCenter(int mouseX, int mouseY, int width, int height)
@@ -135,13 +81,3 @@ void   			Model::setDefaultView()
 	dropToDefaultGravityCenter();
 	m_camera->dropToDefaultCamera();
 }
-
-void 			Model::restart()
-{
-	m_particleManager->reinitCurrentParticleSystem(m_mesh, m_currentParticleCount);
-	m_particleManager->startCurrentParticleSystem(m_mesh);
-}
-/*void 		Model::cameraRotate(const float deltaTime, float deltaX, float deltaY)
-{
-
-}*/

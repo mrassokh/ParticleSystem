@@ -21,7 +21,7 @@
 
 
 struct imGuiInfo {
-	int 	 	ps;
+	int	 		ps;
 	int 	 	prev_ps;
 	int 		particle_count;
 	int 		prev_particle_count;
@@ -38,13 +38,13 @@ const float DISTANCE_FROM_CAMERA_TO_GRAVITY_PLANE =  1.0f;
 
 class Model : public Observable {
 public:
-	Model();//:m_mesh(SPHERE), m_isRunning(true);
+	Model();
 	Model(Model const & rhs) = delete;
 	Model & operator=(Model const & rhs) = delete;
 	virtual ~Model(){};
 
-	void 				setMesh(INIT_MESH mesh);
-	const INIT_MESH 	getMesh() const {return m_mesh;};
+	void 				setMesh(psType const type);
+	const psType 		getMesh() const {return m_type;};
 	const bool			getIsRunning() const {return m_isRunning;};
 
 	void 				setIsRunning(bool isRunning) {m_isRunning = isRunning;};
@@ -57,32 +57,27 @@ public:
 	void 				cameraMoveForward(const float deltaTime) {m_camera->move(TO_FORWARD, deltaTime * MOVE_SPEED);};
 	void 				cameraRotate(float deltaX, float deltaY){m_camera->rotate(deltaX * MOUSE_SENSITIVITY, deltaY * MOUSE_SENSITIVITY);};
 	void 				initModel();
-	void 				draw();
 
 	void   				setIsGravityActive(bool isGravity) {m_isGravityActive = isGravity;};
-	void   				setGravityCenter(int mouseX, int mouseY, int width, int height);// {m_isGravityActive = isGravity};
+	void   				setGravityCenter(int mouseX, int mouseY, int width, int height);
 	void 				dropToDefaultGravityCenter();
 	void   				setDefaultView();
-	void 				start() {m_particleManager->startCurrentParticleSystem(m_mesh);};
-	void 				stop() {m_particleManager->stopCurrentParticleSystem(m_mesh);};
-	void 				restart();
-	void 				setCurrentParticleSystem(INIT_MESH ps){m_mesh = ps;};
+
+	void 				update() {m_particleManager->updateCurrentParticleSystem(m_type);};
+	void 				start() {m_particleManager->startCurrentParticleSystem(m_type);};
+	void 				stop() {m_particleManager->stopCurrentParticleSystem(m_type);};
+	void 				reinit(){m_particleManager->reinitCurrentParticleSystem(m_type, m_currentParticleCount);};
+	void 				setCurrentParticleSystem(psType const type){m_type = type;};
 	void				setCurrentParticleSystemNumbers(int numbers) {m_currentParticleCount = numbers;};
 	void 				changeIsCameraMoveMode(){m_camera->changeIsCameraMoveMode();};
-	//int & 				getCurrentParticleSystemCount() {m_particleManager->getCurrentParticleSystemCount(m_mesh);};
 
+	psPtr &				getCurrentParticleSystem() {return m_particleManager->getCurrentParticleSystem(m_type);};
 
-	GLuint VBO;
-	GLuint VAO;
-	GLuint vertexShader;
-	std::shared_ptr<Shader> m_shader;
-	glm::mat4 view;
-	glm::mat4 projection;
 private:
 	void 				loadResources();
 	void 				initParticleSystems();
 
-	INIT_MESH 			m_mesh;
+	psType 				m_type;
 	bool 				m_isRunning;
 	bool 				m_isGravityActive;
 	glm::vec3			m_gravityCenter;

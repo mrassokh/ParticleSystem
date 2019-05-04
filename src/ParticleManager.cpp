@@ -72,14 +72,14 @@ void 			ParticleManager::draw(glm::mat4 const & projection, glm::mat4 const & vi
 		auto & ps = element;
 		if (ps->chekLiveTime()){
 			// std::cout << "draw element: " << element.first<<std::endl;
-			// auto start1 = std::chrono::high_resolution_clock::now();
+			 auto start1 = std::chrono::high_resolution_clock::now();
 			ps->updateGLBufers(ps->getUpdateKernelName());
-			// auto end1 = std::chrono::high_resolution_clock::now();
-		   // std::chrono::duration<double> diff1 = end1-start1;
-	  //std::cout << "updateGLContent: "<<diff1.count()<<std::endl;
+			 auto end1 = std::chrono::high_resolution_clock::now();
+		    std::chrono::duration<double> diff1 = end1-start1;
+	  std::cout << "updateGLContent: "<<diff1.count()<<std::endl;
 
-				auto start = std::chrono::high_resolution_clock::now();
-				ps->drawGLContent(projection, view, transforms);
+				//auto start = std::chrono::high_resolution_clock::now();
+				//ps->drawGLContent(projection, view, transforms);
 			// 	 auto end = std::chrono::high_resolution_clock::now();
 			// 	std::chrono::duration<double> diff = end-start;
 		   // std::cout << "drawGLContent: "<<diff.count()<<std::endl;
@@ -91,7 +91,7 @@ void 			ParticleManager::draw(glm::mat4 const & projection, glm::mat4 const & vi
     // std::cout << "draw function: " << diff.count()<<std::endl;
 }
 
-void 				ParticleManager::startCurrentParticleSystem(INIT_MESH const type)
+void 				ParticleManager::startCurrentParticleSystem(psType const type)
 {
 	auto ps = m_particleSystems[type];
 	if (ps->isRunning())
@@ -99,26 +99,29 @@ void 				ParticleManager::startCurrentParticleSystem(INIT_MESH const type)
 	ps->start();
 }
 
-void 				ParticleManager::stopCurrentParticleSystem(INIT_MESH const type)
+void 				ParticleManager::stopCurrentParticleSystem(psType const type)
 {
 	auto ps = m_particleSystems[type];
 	ps->stop();
 }
 
 
-void 				ParticleManager::reinitCurrentParticleSystem(INIT_MESH const type, int const particleCount)
+void 				ParticleManager::reinitCurrentParticleSystem(psType const type, int const particleCount)
 {
 	auto ps = m_particleSystems[type];
 	ps->stop();
 	ps->clearMemoryStack();
 	ps->setParticleCount(particleCount);
 		std::cout<< " RESOURCE.getParticleInfo\n";
-	auto info = RESOURCE.getParticleInfo(static_cast<psType>(type));
+	auto info = RESOURCE.getParticleInfo(type);
 	ps->createGLBufers();
 	ps->initGLBufers(info.initName);
+}
 
-	/*std::cout << "CURRENT POINTER is \n\n\n\n\n"<< ps.get() << std::endl;
-	auto info = RESOURCE.getParticleInfo(static_cast<psType>(type));
-	std::cout << "create particle system with " << particleCount << "\n";
-	m_particleSystems.at(type) = PARTICLE_CREATOR.createParticleSystem(static_cast<psType>(type), m_CLE, info, particleCount);*/
+void 				ParticleManager::updateCurrentParticleSystem(psType const type)
+{
+	if (m_particleSystems[type]->chekLiveTime()) {
+		m_particleSystems[type]->updateGLBufers(m_particleSystems[type]->getUpdateKernelName());
+		 std::cout << "updateGLContent: "<<std::endl;
+	}
 }

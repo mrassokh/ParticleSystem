@@ -17,11 +17,11 @@
 
 #include <vector>
 
-enum INIT_MESH
+/*enum INIT_MESH
 {
 	S,
 	C
-};
+};*/
 
 typedef enum 	ParticleSystemType
 {
@@ -31,7 +31,7 @@ typedef enum 	ParticleSystemType
 
 class Observer {
 public:
-	virtual void changeMesh(INIT_MESH mesh) = 0;
+	virtual void changeMesh(psType type) = 0;
 };
 
 typedef std::shared_ptr<Observer> viewPtr;
@@ -46,7 +46,7 @@ public:
 	virtual ~Observable() {m_observers.clear();};
 
 	void addObserver(Observer *observer);
-   	void notifyChangeMesh(INIT_MESH mesh);
+   	void notifyChangeMesh(psType type);
 private:
    	std::vector<Observer *> m_observers;
 };
