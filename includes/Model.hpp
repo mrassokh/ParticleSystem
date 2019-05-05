@@ -51,6 +51,7 @@ public:
 
 	glm::mat4 const & 	getCameraView() {return m_camera->getView();};
 	float 				getCameraZoom() {return m_camera->getZoom();};
+
 	void 				cameraMoveRight(const float deltaTime) {m_camera->move(TO_RIGHT, deltaTime * MOVE_SPEED);};
 	void 				cameraMoveLeft(const float deltaTime) {m_camera->move(TO_LEFT, deltaTime * MOVE_SPEED);};
 	void 				cameraMoveBackward(const float deltaTime) {m_camera->move(TO_BACKWARD, deltaTime * MOVE_SPEED);};
@@ -59,14 +60,18 @@ public:
 	void 				initModel();
 
 	void   				setIsGravityActive(bool isGravity) {m_isGravityActive = isGravity;};
-	void   				setGravityCenter(int mouseX, int mouseY, int width, int height);
+	void   				setGravityCenter(int mouseX, int mouseY, int width, int height){setPointFromMouse(mouseX,mouseY, width, height, true);};
+	void   				setPointFromMouse(int mouseX, int mouseY, int width, int height, bool isGravityPoint);
+	glm::vec3 const &	getGravityCenter() const {return m_gravityCenter;};
+	void   				setCursorPoint(int mouseX, int mouseY, int width, int height) {setPointFromMouse(mouseX,mouseY, width, height, false);};
+	glm::vec3 const &	getCursorPoint() const {return m_cursorPoint;};
 	void 				dropToDefaultGravityCenter();
 	void   				setDefaultView();
 
-	void 				update() {m_particleManager->updateCurrentParticleSystem(m_type);};
+	void 				update() {m_particleManager->updateCurrentParticleSystem(m_type, m_gravityCenter, m_isGravityActive);};
 	void 				start() {m_particleManager->startCurrentParticleSystem(m_type);};
 	void 				stop() {m_particleManager->stopCurrentParticleSystem(m_type);};
-	void 				reinit(){m_particleManager->reinitCurrentParticleSystem(m_type, m_currentParticleCount);};
+	void 				reinit(){m_particleManager->reinitCurrentParticleSystem(m_type, m_currentParticleCount); m_gravityCenter = glm::vec3(0,0,0);};
 	void 				setCurrentParticleSystem(psType const type){m_type = type;};
 	void				setCurrentParticleSystemNumbers(int numbers) {m_currentParticleCount = numbers;};
 	void 				changeIsCameraMoveMode(){m_camera->changeIsCameraMoveMode();};
@@ -81,6 +86,7 @@ private:
 	bool 				m_isRunning;
 	bool 				m_isGravityActive;
 	glm::vec3			m_gravityCenter;
+	glm::vec3			m_cursorPoint;
 	particleManager 	m_particleManager;
 	cameraPtr			m_camera;
 	int 				m_currentParticleCount;

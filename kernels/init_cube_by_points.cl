@@ -5,8 +5,8 @@
 typedef struct
 {
 	float4	position;
-	float4	velocity;
-	float4	color;
+	//float4	velocity;
+	//float4	color;
 }			Particle;
 
 void kernel initialize_Cube(global Particle * particles, int particleCount)
@@ -28,6 +28,6 @@ void kernel initialize_Cube(global Particle * particles, int particleCount)
 	position->z = z * particleArea - 0.5 + particleArea2;
 	position->w = 0.0f;
 
-	particles[i].velocity = NULITY;
-	particles[i].color = (float4)(1.0f, 0.5f, 0.0f, 1.0f);
+	//particles[i].velocity = NULITY;
+	//particles[i].color = (float4)(1.0f, 0.5f, 0.0f, 1.0f);
 }

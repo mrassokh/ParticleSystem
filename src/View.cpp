@@ -131,36 +131,26 @@ void 		View::drawImGui()
 void 		View::draw()
 {
 	defineDeltaTime();
-
-	//std::cout << "View deltatime is " << m_deltaTime;
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClearColor(0.02f, 0.03f, 0.03f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	 glViewport(0, 0, m_width, m_height);
-	 m_projection = glm::perspective(glm::radians(m_model->getCameraZoom()), static_cast<float>(m_width) / static_cast<float>(m_height), 0.1f, 100.0f);
-	 drawPS(m_projection);
-	 //m_model->draw();
-	// m_model->m_shader->use();
-	// m_model->m_shader->setMat4("view", m_model->getCameraView());
-	//m_model->m_shader->setMat4("view", m_model->view);
- //	m_model->m_shader->setMat4("projection", m_projection);
-	/*glBindVertexArray(m_model->VAO);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-	glBindVertexArray(0);*/
+	glViewport(0, 0, m_width, m_height);
 
+	m_projection = glm::perspective(glm::radians(m_model->getCameraZoom()), static_cast<float>(m_width) / static_cast<float>(m_height), 0.1f, 100.0f);
+ 	drawPS(m_projection, m_model->getCursorPoint());
 	imGuiPollEvent();
 	drawImGui();
 
 	SDL_PollEvent(&m_event);
-
 	SDL_GL_SwapWindow(m_window);
 }
 
-void 		View::drawPS(glm::mat4 const & projection)
+void 		View::drawPS(glm::mat4 const & projection, glm::vec3 const & cursorPoint)
 {
 	std::vector<glm::mat4> transforms;
 	glm::mat4 model = glm::mat4(1.0f);
 	transforms.push_back(model);
-	(this->*m_drawPs[m_type])(m_model->getCurrentParticleSystem(), projection, m_model->getCameraView(), transforms);
+	glm::mat4 projection_view = projection * m_model->getCameraView();
+	(this->*m_drawPs[m_type])(m_model->getCurrentParticleSystem(),projection_view, cursorPoint, transforms);
 }
 
 void 		View::defineDeltaTime()
@@ -198,15 +188,18 @@ void 		View::imGuiPollEvent()
 	}
 }
 
-void 		View::drawPointPS(psPtr & particleSystem, glm::mat4 const & projection, glm::mat4  const & view, std::vector<glm::mat4> const & transforms)
+//void 		View::drawPointPS(psPtr & particleSystem, glm::mat4 const & projection, glm::mat4  const & view, std::vector<glm::mat4> const & transforms)
+void 		View::drawPointPS(psPtr & particleSystem, glm::mat4 const & projection_view, glm::vec3 const & cursorPoint, std::vector<glm::mat4> const & transforms)
 {
 	auto shader = particleSystem->getShader();
 	if (!shader)
 		throw CustomException("Shader for particle system is not defined!");
 
 	shader->use();
-	shader->setMat4("projection", projection);
-	shader->setMat4("view", view);
+	shader->setMat4("projection_view", projection_view);
+	shader->setVec3("cursorPoint", cursorPoint);
+	//shader->setMat4("projection", projection);
+	//shader->setMat4("view", view);
 	std::cout << "drawGLContent \n ";
 	//	printf("drawGLContent \n");
 	glEnable(GL_BLEND);

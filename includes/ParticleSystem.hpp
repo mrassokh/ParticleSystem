@@ -22,14 +22,14 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "MVCBase.hpp"
 
-# define LIVE_TIME 2.0f
+# define LIVE_TIME 15.0f
 # define LIVE_TIME_CLOUD 2000000.0f
 
 struct Particle
 {
 	cl_float4	position;
-	cl_float4	velocity;
-	cl_float4	color;
+	//cl_float4	velocity;
+//	cl_float4	color;
 };
 
 const int particleCount = 1000000;
@@ -72,8 +72,8 @@ public:
 	virtual void 				setInstanceBuffer() = 0;
 	virtual void 				setTexture(std::string const & textureName) = 0;
 	virtual void 				initGLBufers(std::string const & initKernelName) = 0;
-	virtual void 				updateGLBufers(std::string const & updateKernelName) = 0;
-	virtual void				drawGLContent(glm::mat4 const & projection, glm::mat4  const & view, std::vector<glm::mat4> const & transforms) = 0;
+	virtual void 				updateGLBufers(std::string const & updateKernelName, glm::vec3 const & gravityCenter, bool isGravityActive) = 0;
+	//virtual void				drawGLContent(glm::mat4 const & projection, glm::mat4  const & view, std::vector<glm::mat4> const & transforms) = 0;
 
 protected:
 	std::shared_ptr<CLEngine> 	m_CLE;

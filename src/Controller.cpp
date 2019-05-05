@@ -31,6 +31,7 @@ void 		Controller::liveCycle()
 void 		Controller::eventsAnalyses(Events const &ev)
 {
 	mouseShiftCoord mouseShift;
+	m_model->setCursorPoint(m_inputManager->getXMouse(), m_inputManager->getYMouse(), m_view->getWidth(), m_view->getHeight());
 	switch (ev) {
 		case Events::FINISH:
 			m_model->setIsRunning(false);

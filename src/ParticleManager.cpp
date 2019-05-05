@@ -73,7 +73,7 @@ void 			ParticleManager::draw(glm::mat4 const & projection, glm::mat4 const & vi
 		if (ps->chekLiveTime()){
 			// std::cout << "draw element: " << element.first<<std::endl;
 			 auto start1 = std::chrono::high_resolution_clock::now();
-			ps->updateGLBufers(ps->getUpdateKernelName());
+			//ps->updateGLBufers(ps->getUpdateKernelName());
 			 auto end1 = std::chrono::high_resolution_clock::now();
 		    std::chrono::duration<double> diff1 = end1-start1;
 	  std::cout << "updateGLContent: "<<diff1.count()<<std::endl;
@@ -118,10 +118,10 @@ void 				ParticleManager::reinitCurrentParticleSystem(psType const type, int con
 	ps->initGLBufers(info.initName);
 }
 
-void 				ParticleManager::updateCurrentParticleSystem(psType const type)
+void 				ParticleManager::updateCurrentParticleSystem(psType const type, glm::vec3 const & gravityCenter, bool isGravityActive)
 {
 	if (m_particleSystems[type]->chekLiveTime()) {
-		m_particleSystems[type]->updateGLBufers(m_particleSystems[type]->getUpdateKernelName());
-		 std::cout << "updateGLContent: "<<std::endl;
+		m_particleSystems[type]->updateGLBufers(m_particleSystems[type]->getUpdateKernelName(), gravityCenter, isGravityActive);
+		// std::cout << "updateGLContent: "<<std::endl;
 	}
 }

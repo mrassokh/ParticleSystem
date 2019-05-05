@@ -13,7 +13,7 @@
 #ifndef  MVC_BASE_HPP
 #define MVC_BASE_HPP
 
-# define LIVE_TIME 2.0f
+//# define LIVE_TIME 2.0f
 
 #include <vector>
 

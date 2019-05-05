@@ -6,8 +6,8 @@
 typedef struct
 {
 	float4	position;
-	float4	velocity;
-	float4	color;
+	//float4	velocity;
+	//float4	color;
 }			Particle;
 
 void kernel initialize_sphere(global Particle * particles, int particleCount)//, global Particle * out)
@@ -35,8 +35,4 @@ void kernel initialize_sphere(global Particle * particles, int particleCount)//,
 	position->y = radius * cos(delta.x * y + offset.x)/ 1.f;
 	position->z = radius * sin(delta.x * y + offset.x) * cos(delta.y * x + offset.y)/ 1.f;
 	position->w = 0.0f;
-
-	particles[i].velocity = (float4)(0.0f, 0.0f, 0.0f, 0.0f);
-	particles[i].color = (float4)(1.0f, 0.8f, 0.0f, 1.0f);
-	//out[i] = particles[i];
 }

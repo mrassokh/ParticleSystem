@@ -19,7 +19,7 @@
 #include "ParticleSystem.hpp"
 #include "ParticleSystemCreator.hpp"
 #include "Resource.hpp"
-const int INIT_PARTICLE_COUNT =  4;//1000000;
+const int INIT_PARTICLE_COUNT =  1000000;
 
 typedef std::vector<psPtr> ParticleSystems;
 
@@ -36,7 +36,7 @@ public:
 	void 						startCurrentParticleSystem(psType const type);
 	void 						stopCurrentParticleSystem(psType const type);
 	void 						reinitCurrentParticleSystem(psType const type, int const particleCount);
-	void 						updateCurrentParticleSystem(psType const type);
+	void 						updateCurrentParticleSystem(psType const type, glm::vec3 const & gravityCenter, bool isGravityActive);
 	psPtr &						getCurrentParticleSystem(psType const type) {return m_particleSystems[type];};
 
 	void 						draw(glm::mat4 const & projection, glm::mat4 const & view);

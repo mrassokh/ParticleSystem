@@ -22,8 +22,8 @@ void 		ParticleSystemPoint::createGLBufers()
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (GLvoid*)0);
 
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (GLvoid*)(8* sizeof(GLfloat)));
+	//glEnableVertexAttribArray(1);
+	//glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (GLvoid*)(8* sizeof(GLfloat)));
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
@@ -85,46 +85,31 @@ void 			ParticleSystemPoint::initGLBufers(std::string const & initKernelName)
 	}*/
 }
 
-void 			ParticleSystemPoint::updateGLBufers(std::string const & updateKernelName)
+void 			ParticleSystemPoint::updateGLBufers(std::string const & updateKernelName, glm::vec3 const & gravityCenter, bool isGravityActive)
 {
 	glFinish();
 
 	cl::Kernel kernel;
 	m_CLE->getKernel(updateKernelName, kernel);
-	std::cout << "update with " << updateKernelName << "and particle count " << m_particleCount;
+	//std::cout << "update with " << updateKernelName << "and particle count " << m_particleCount;
 	auto commandQueue = m_CLE->getCommandQueue();
  	commandQueue.enqueueAcquireGLObjects(&m_memory);
+	/*cl_float4  gravityCenter1;
+	gravityCenter1.x = gravityCenter.x;
+	gravityCenter1.y = gravityCenter.y;
+	gravityCenter1.z = gravityCenter.z;
+	gravityCenter1.w = 0;*/
+	// = cl_float4(gravityCenter, 1.0f);
 	kernel.setArg(0, m_memory.front());
 	kernel.setArg(1, m_deltaTime);
+	kernel.setArg(2, gravityCenter);
+	//kernel.setArg(2, gravityCenter1);
+	kernel.setArg(3,isGravityActive);
 
 	commandQueue.enqueueNDRangeKernel(kernel, cl::NullRange, cl::NDRange(m_particleCount), cl::NullRange);
 	commandQueue.enqueueReleaseGLObjects(&m_memory);
 	commandQueue.finish();
 	cl::finish();
-}
-
-void 			ParticleSystemPoint::drawGLContent(glm::mat4 const & projection, glm::mat4  const & view, std::vector<glm::mat4> const & transforms)
-{
-	if (!m_shader)
-		throw CustomException("Shader for particle system is not defined!");
-
-	m_shader->use();
-	m_shader->setMat4("projection", projection);
-	m_shader->setMat4("view", view);
-	std::cout << "drawGLContent \n ";
-//	printf("drawGLContent \n");
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glBindBuffer(GL_ARRAY_BUFFER, m_IBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * transforms.size(), &transforms[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    glBindVertexArray(m_VAO);
-    //glDrawArraysInstanced(GL_POINTS, 0, m_particleCount, transforms.size());
-	glDrawArrays(GL_POINTS, 0, m_particleCount);
-    glBindVertexArray(0);
-	glDisable(GL_BLEND);
-	glFinish();
 }
 
 void 				ParticleSystemPoint::setTexture(std::string const & textureName)

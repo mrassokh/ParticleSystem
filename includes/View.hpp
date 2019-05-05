@@ -52,8 +52,9 @@ public:
 	const psType		getCurrentPs() const {return static_cast<psType>(m_imGuiInfo.ps);};
 	const int 			getParticleCount() const {return m_imGuiInfo.particle_count;};
 private:
-	void 				drawPS(glm::mat4 const & projection);
-	void 				drawPointPS(psPtr & particleSystem, glm::mat4 const & projection, glm::mat4  const & view, std::vector<glm::mat4> const & transforms);
+	void 				drawPS(glm::mat4 const & projection, glm::vec3 const & cursorPoint);
+	//void 				drawPointPS(psPtr & particleSystem, glm::mat4 const & projection, glm::mat4  const & view, std::vector<glm::mat4> const & transforms);
+	void 				drawPointPS(psPtr & particleSystem, glm::mat4 const & projection_view, glm::vec3 const & cursorPoint, std::vector<glm::mat4> const & transforms);
 	void 				initView();
 	void 				initSDL();
 	void 				initOpenGL();
@@ -83,8 +84,10 @@ private:
 	int					tick_counter;
 	float				m_second;
 
-	std::vector<void (View::*)(psPtr & particleSystem, glm::mat4 const & projection, glm::mat4  const & view,
-		 						std::vector<glm::mat4> const & transforms)>	m_drawPs;
+	//std::vector<void (View::*)(psPtr & particleSystem, glm::mat4 const & projection, glm::mat4  const & view,
+		 					//	std::vector<glm::mat4> const & transforms)>	m_drawPs;
+	std::vector<void (View::*)(psPtr & particleSystem, glm::mat4 const & projection_view,glm::vec3 const & cursorPoint,
+								std::vector<glm::mat4> const & transforms)>	m_drawPs;
 
 };
 #endif /* end of include guard: VIEW_HPP */
