@@ -81,10 +81,10 @@ void   			Model::setPointFromMouse(int mouseX, int mouseY, int width, int height
 	glm::vec3 forwardVector = m_camera->getDirection() * DISTANCE_FROM_CAMERA_TO_GRAVITY_PLANE;
 	if (isGravityPoint) {
 		m_gravityCenter = m_camera->getPosition() + forwardVector + rightVector + upVector;
-		std::cout << "gravity center" << m_gravityCenter.x << " " << m_gravityCenter.y << " " << m_gravityCenter.z << std::endl;
+		//std::cout << "gravity center" << m_gravityCenter.x << " " << m_gravityCenter.y << " " << m_gravityCenter.z << std::endl;
 	} else {
 		m_cursorPoint = m_camera->getPosition() + forwardVector + rightVector + upVector;
-		std::cout << "cursor point" << m_cursorPoint.x << " " << m_cursorPoint.y << " " << m_cursorPoint.z << std::endl;
+		//std::cout << "cursor point" << m_cursorPoint.x << " " << m_cursorPoint.y << " " << m_cursorPoint.z << std::endl;
 	}
 }
 

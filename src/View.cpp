@@ -200,7 +200,7 @@ void 		View::drawPointPS(psPtr & particleSystem, glm::mat4 const & projection_vi
 	shader->setVec3("cursorPoint", cursorPoint);
 	//shader->setMat4("projection", projection);
 	//shader->setMat4("view", view);
-	std::cout << "drawGLContent \n ";
+	//std::cout << "drawGLContent \n ";
 	//	printf("drawGLContent \n");
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
