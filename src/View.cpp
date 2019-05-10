@@ -82,7 +82,7 @@ void 		View::initOpenGL()
 	GLenum err = glewInit();
 	if (err != GLEW_OK)
 	{
-		printf("Aaaaaaaaaaa!");
+		printf("Oh!");
 		exit(0);
 	}
 	glViewport(0, 0, m_width, m_height);
@@ -161,11 +161,9 @@ void 		View::defineDeltaTime()
 	m_curTime = SDL_GetPerformanceCounter();
 	m_deltaTime = (m_curTime - m_lastTime) / static_cast<float>(SDL_GetPerformanceFrequency());
 
-	//m_FPS = 1 / m_deltaTime;
 	if (m_second < 1.0f){
 		m_second += m_deltaTime;
 		m_FPS_inc += 1 / m_deltaTime;
-		//m_FPS_sum  += m_FPS;
 		tick_counter++;
 	} else {
 		m_FPS = m_FPS_inc / tick_counter;
@@ -190,7 +188,6 @@ void 		View::imGuiPollEvent()
 	}
 }
 
-//void 		View::drawPointPS(psPtr & particleSystem, glm::mat4 const & projection, glm::mat4  const & view, std::vector<glm::mat4> const & transforms)
 void 		View::drawPointPS(psPtr & particleSystem, glm::mat4 const & projection_view, glm::vec3 const & cursorPoint, std::vector<glm::mat4> const & transforms)
 {
 	auto shader = particleSystem->getShader();
@@ -200,10 +197,7 @@ void 		View::drawPointPS(psPtr & particleSystem, glm::mat4 const & projection_vi
 	shader->use();
 	shader->setMat4("projection_view", projection_view);
 	shader->setVec3("cursorPoint", cursorPoint);
-	//shader->setMat4("projection", projection);
-	//shader->setMat4("view", view);
-	//std::cout << "drawGLContent \n ";
-	//	printf("drawGLContent \n");
+	
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glBindBuffer(GL_ARRAY_BUFFER, particleSystem->getIBO());
@@ -212,7 +206,6 @@ void 		View::drawPointPS(psPtr & particleSystem, glm::mat4 const & projection_vi
 
 	glBindVertexArray(particleSystem->getVAO());
 	glDrawArraysInstanced(GL_POINTS, 0, particleSystem->getParticleCount(), transforms.size());
-	//glDrawArrays(GL_POINTS, 0, particleSystem->getParticleCount());
 	glBindVertexArray(0);
 	glDisable(GL_BLEND);
 	glFinish();

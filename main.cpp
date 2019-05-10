@@ -10,23 +10,25 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "testlib.h"
-#include "Controller.hpp"
-
+//#include "Controller.hpp"
+#include "ParticleSystemApplication.hpp"
 
 
 int main()
 {
 
-	Model* model = new Model();
+PARTICLE_SYSTEM.run();
+	/*Model* model = new Model();
 
 	View *view = new View(model);
 	model->initModel();
 	Controller * controller = new Controller(model,view);
 	controller->liveCycle();
 
+
 	delete view;
 	delete controller;
-
+	//delete model;
+	std::cout << "aaa\n";*/
     return 0;
 }

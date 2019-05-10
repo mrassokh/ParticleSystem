@@ -22,5 +22,5 @@ void kernel update_sphere(global Particle * particles, float deltaTime, float3 g
 		velocity.y = velocity.y >= 0.0 ? velocity.y + parDist_0 *  parDist_1  : -velocity.y /10 + 1.5f * parDist_1;
 		particle->xyz += velocity * deltaTime * cos(particle->w);
 	}
-	particle->w+= deltaTime;
+	particle->w += deltaTime;
 };
