@@ -22,9 +22,11 @@ ParticleSystemCreator::ParticleSystemCreator()
 {
 	m_createFunctions.push_back(&ParticleSystemCreator::createParticleSystemPoint);
 	m_createFunctions.push_back(&ParticleSystemCreator::createParticleSystemCube);
-	/*m_createFunctions.push_back(&ParticleSystemCreator::createParticleSystemQuad);
-	m_createFunctions.push_back(&ParticleSystemCreator::createParticleSystemBrick);
-	m_createFunctions.push_back(&ParticleSystemCreator::createParticleSystemQuad);*/
+	m_createFunctions.push_back(&ParticleSystemCreator::createParticleSystemPoint);
+	m_createFunctions.push_back(&ParticleSystemCreator::createParticleSystemCube);
+	/*m_createFunctions.push_back(&ParticleSystemCreator::createParticleSystemSphereLive);
+	m_createFunctions.push_back(&ParticleSystemCreator::createParticleSystemCubeLive);
+	/*m_createFunctions.push_back(&ParticleSystemCreator::createParticleSystemQuad);*/
 }
 
 ParticleSystemCreator::~ParticleSystemCreator()

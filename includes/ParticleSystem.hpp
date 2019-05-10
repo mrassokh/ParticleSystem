@@ -22,7 +22,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "MVCBase.hpp"
 
-# define LIVE_TIME 15.0f
+# define LIVE_TIME 55.0f
 # define LIVE_TIME_CLOUD 2000000.0f
 
 struct Particle

@@ -1,4 +1,5 @@
 #define SPHERE_RADIUS	0.3f
+#define LIVE_TIME		2.0f
 
 typedef float4 Particle;
 
@@ -25,5 +26,6 @@ void kernel initialize_sphere(global Particle * particles, int particleCount)
 	particle->x = radius * sin(delta.x * y + offset.x) * sin(delta.y * x + offset.y) / 1.f;
 	particle->y = radius * cos(delta.x * y + offset.x)/ 1.f;
 	particle->z = radius * sin(delta.x * y + offset.x) * cos(delta.y * x + offset.y)/ 1.f;
-	particle->w = 0.0f;
+	particle->w = 10 * length(particle->xyz);//0.0f;
+	//particle->w = 0.0f;
 }

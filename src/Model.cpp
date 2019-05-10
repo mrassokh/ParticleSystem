@@ -36,15 +36,22 @@ void 		Model::loadResources()
 {
 	try {
 		RESOURCE.loadShader("../shaders/point.vx.glsl", "../shaders/point.ft.glsl", "point_shader");
-		std::cout<< "p1\n";
+		RESOURCE.loadShader("../shaders/point_time.vx.glsl", "../shaders/point_time.ft.glsl", "point_time_shader");
+
 		RESOURCE.addKernel("../kernels/init_sphere_by_points.cl","initSphere","initSphereProgram", "initSphereKernel","initialize_sphere");
-std::cout<< "p2\n";
+
 		RESOURCE.addKernel("../kernels/update_sphere_by_points.cl","updateSphere","updateSphereProgram", "updateSphereKernel","update_sphere");
 		RESOURCE.initParticleInfo(SPHERE,"initSphereKernel", "updateSphereKernel", "point_shader", "", LIVE_TIME);
 
 		RESOURCE.addKernel("../kernels/init_cube_by_points.cl","initCube","initCubeProgram", "initCubeKernel","initialize_Cube");
 		RESOURCE.addKernel("../kernels/update_cube_by_points.cl","updateCube","updateCubeProgram", "updateCubeKernel","update_Cube");
+
 		RESOURCE.initParticleInfo(CUBE,"initCubeKernel", "updateCubeKernel", "point_shader", "", LIVE_TIME);
+		RESOURCE.addKernel("../kernels/update_cube_by_points_liveTime.cl","updateCubeLiveTime","updateCubeProgramLiveTime", "updateCubeKernelLiveTime","update_Cube");
+		RESOURCE.initParticleInfo(CUBE_EXPLOSION,"initCubeKernel", "updateCubeKernelLiveTime", "point_time_shader", "", LIVE_TIME);
+
+		RESOURCE.addKernel("../kernels/update_sphere_by_points_liveTime.cl","updateSphereLiveTime","updateSphereProgramLiveTime", "updateSphereKernelLiveTime","update_sphere");
+		RESOURCE.initParticleInfo(SPHERE_EXPLOSION,"initSphereKernel", "updateSphereKernelLiveTime", "point_time_shader", "", LIVE_TIME);
 	} catch (CustomException &ex) {
 		std::cout << ex.what() << std::endl;
 		exit(42);

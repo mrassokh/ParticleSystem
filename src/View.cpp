@@ -110,6 +110,8 @@ void 		View::drawImGui()
 	ImGui::SliderInt("", &m_imGuiInfo.particle_count, 100000, 3000000);
 	ImGui::RadioButton("SPHERE", &m_imGuiInfo.ps, SPHERE);
 	ImGui::RadioButton("CUBE", &m_imGuiInfo.ps, CUBE);
+	ImGui::RadioButton("SPHERE_TIME", &m_imGuiInfo.ps, SPHERE_EXPLOSION);
+	ImGui::RadioButton("CUBE_TIME", &m_imGuiInfo.ps, CUBE_EXPLOSION);
 	if (ImGui::Button("START", STANDARD_MENU_BUTTON))
 	{
 		m_imGuiEvent = imGuiEvent::START;

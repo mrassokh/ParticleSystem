@@ -21,5 +21,6 @@ void kernel initialize_Cube(global Particle * particles, int particleCount)
 	particle->x = x * particleArea - 0.3 + particleArea2 + QUAD_SIZE / 2;
 	particle->y = y * particleArea - 0.3 + particleArea2  + QUAD_SIZE / 2;
 	particle->z = z * particleArea - 0.3 + particleArea2;
-	particle->w = 0.0f;
+	//particle->w = 0.0f;
+	particle->w = 10 * length(particle->xyz);//0.0f;
 }

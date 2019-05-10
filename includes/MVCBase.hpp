@@ -26,7 +26,9 @@
 typedef enum 	ParticleSystemType
 {
 	SPHERE,
-  	CUBE
+  	CUBE,
+	SPHERE_EXPLOSION,
+	CUBE_EXPLOSION
 }				psType;
 
 class Observer {
