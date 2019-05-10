@@ -20,9 +20,7 @@ Resource & 	Resource::getInstance()
 
 Resource::Resource()
 {
-	std::cout << "Resource()" << std::endl;
 	m_CLEngine = std::shared_ptr<CLEngine>(CLEngine::getInstance());
-	//std::cout << "m_CLE : " << m_CLEngine.get() << std::endl;*/
 }
 
 
@@ -45,11 +43,8 @@ void			Resource::addKernel(std::string const & srcPath, std::string const & srcN
 {
 
 	m_CLEngine->addProgramSource(srcPath, srcName);
-	std::cout<< "p3\n";
 	m_CLEngine->addProgramFromSource(srcName, programName);
-	std::cout<< "p4\n";
 	m_CLEngine->addKernel(programName, kernelName, funcName);
-	std::cout<< "p5\n";
 }
 
 void 			Resource::initParticleInfo(psType type, std::string const & initName, std::string const & updateName,

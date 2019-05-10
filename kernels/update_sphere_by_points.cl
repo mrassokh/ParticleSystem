@@ -1,5 +1,4 @@
 #define MAX_SPHERE_RADIUS 0.3f
-#define DOUBLE_MAX_SPHERE_RADIUS 2 * MAX_SPHERE_RADIUS
 #define Z (float3)(0.0f, 0.0f, 1.0f)
 #define DIV 1 / MAX_SPHERE_RADIUS
 

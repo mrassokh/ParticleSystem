@@ -52,8 +52,8 @@ public:
 	virtual ~Resource();
 private:
 	Resource();
-	//Resource(Resource const &) = delete;
-	//Resource operator = (Resource const &) = delete;
+	Resource(Resource const &) = delete;
+	Resource operator = (Resource const &) = delete;
 
 
 	clePtr 						m_CLEngine;

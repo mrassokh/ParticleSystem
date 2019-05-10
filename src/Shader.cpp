@@ -29,13 +29,9 @@ void 	Shader::load(std::string const & vertPath, std::string const & fragmPath)
 	m_vertShaderPath = vertPath;
 	m_fragShaderPath = fragmPath;
 
-	//std::cout << "readSources()" << std::endl;
 	readSources();
-	//std::cout << "createShader" << std::endl;
 	createShader(m_vertShaderCode, GL_VERTEX_SHADER, m_vertShader);
-	//std::cout << "createShader" << std::endl;
 	createShader(m_fragShaderCode, GL_FRAGMENT_SHADER, m_fragShader);
-	//std::cout << "createProgram" << std::endl;
 	createProgram();
 }
 
@@ -61,7 +57,7 @@ void 		Shader::readSources()
 
 		m_vertShaderCode = vShaderStream.str();
 		m_fragShaderCode = fShaderStream.str();
-		std::cout <<"vert shader is\n" << m_vertShaderCode << "\n" << "frag shader is\n" << m_fragShaderCode << std::endl;
+		//std::cout <<"vert shader is\n" << m_vertShaderCode << "\n" << "frag shader is\n" << m_fragShaderCode << std::endl;
 	}
 	catch(std::ifstream::failure &e)
 	{
@@ -72,14 +68,9 @@ void 		Shader::readSources()
 void 		Shader::createShader(std::string const & shaderCode, GLenum shaderType, GLuint & shader)
 {
 	const char* src = shaderCode.c_str();
-	///std::cout << "createShader_0" << std::endl;
 	shader = glCreateShader(shaderType);
-	//m_vertShader = glCreateShader(GL_VERTEX_SHADER);
-	//std::cout << "createShader_0_1" << std::endl;
 	glShaderSource(shader, 1, &src, nullptr);
-	//std::cout << "createShader_0_2" << std::endl;
 	glCompileShader(shader);
-	//std::cout << "createShader_0_3" << std::endl;
 	if (!isShaderCompiled(shader, 512, m_infolog)){
 		std::string error;
 		switch (shaderType){

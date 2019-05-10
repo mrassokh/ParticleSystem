@@ -19,8 +19,6 @@ public:
 	virtual void 		setTexture(std::string const & textureName);
 	virtual void 		initGLBufers(std::string const & initKernelName);
 	virtual void 		updateGLBufers(std::string const & updateKernelName, glm::vec3 const & gravityCenter, bool isGravityActive);
-	//virtual void 		drawGLContent(glm::mat4 const & projection, glm::mat4 const & view,
-		 								//std::vector<glm::mat4> const & transforms);
 };
 
 #endif

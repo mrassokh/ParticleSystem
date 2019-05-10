@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #ifndef CAMERA_HPP
 #define CAMERA_HPP
 
@@ -56,30 +55,19 @@ private:
 	void 				moveForward(float const velocity){m_position -= m_direction * velocity;};
 	void 				moveBackward(float const velocity){m_position += m_direction * velocity;};
 
+	glm::vec3 			m_position;
+    glm::vec3 			m_direction;
+    glm::vec3 			m_up;
+    glm::vec3 			m_right;
+    glm::vec3 			m_commonUp;
+    glm::mat4 			m_view;
 
-	//void 		rotateAroundY(float velocity);
-	//void 		rotateAroundX(float velocity);
-	//void 		findProjection() {m_projection = glm::perspective(glm::radians(m_zoom), static_cast<float>(mWidth) / static_cast<float>(mHeight), 2.1f, 90.0f);};
+	float 				m_yaw;
+    float 				m_pitch;
+	float 				m_zoom;
+	bool 				m_isCameraMove;
 
-	glm::vec3 	m_position;
-    glm::vec3 	m_direction;
-    glm::vec3 	m_up;
-    glm::vec3 	m_right;
-    glm::vec3 	m_commonUp;
-    glm::mat4 	m_view;
-	//glm::mat4 	m_projection;
-
-	float 		m_yaw;
-    float 		m_pitch;
-	float 		m_zoom;
-
-	bool 		m_isCameraMove;
 	std::vector<void (Camera::*)(float const velocity)>      	m_moveFunc;
-
-
-    /*float mMovementSpeed;
-    float mMouseSensitivity;*/
-
 };
 
 

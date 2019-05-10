@@ -12,13 +12,13 @@
 
 #include "Camera.hpp"
 
-Camera::Camera(glm::vec3 pos, float yaw, float pitch,
-											float zoom) : m_position(pos),
-														m_commonUp(glm::vec3(0.0f, 1.0f,  0.0f)),
-														m_yaw(yaw),
-														m_pitch(pitch),
-														m_zoom(zoom),
-														m_isCameraMove(false)
+Camera::Camera(glm::vec3 pos, float yaw,
+					float pitch, float zoom) : m_position(pos),
+												m_commonUp(glm::vec3(0.0f, 1.0f,  0.0f)),
+												m_yaw(yaw),
+												m_pitch(pitch),
+												m_zoom(zoom),
+												m_isCameraMove(false)
 {
 	calculateCameraVectors();
 	findView();
@@ -38,7 +38,6 @@ void 		Camera::move(CameraChange ev,float const velocity)
 
 	if (!m_isCameraMove)
 		return;
-		std::cout << ev << "with velocity " << velocity << std::endl;
 	(this->*m_moveFunc[ev])(velocity);
 	findView();
 }
@@ -82,31 +81,3 @@ void 		Camera::dropToDefaultCamera()
 	calculateCameraVectors();
 	findView();
 }
-/*void 		Camera::moveRight(float velocity)
-{
-	m_position += m_right * velocity;
-}
-
-void 		Camera::moveLeft(float velocity)
-{
-	m_position += -m_right * velocity;
-}
-
-void 		Camera::moveForward(float velocity)
-{
-	m_position += m_direction * velocity;
-}
-
-void 		Camera::moveBackward(float velocity)
-{
-	m_position -= m_direction * velocity;
-}*/
-
-/*void 		Camera::rotateAroundY(float const velocity)
-{
-
-}
-void 		Camera::rotateAroundX(float velocity)
-{
-
-}*/

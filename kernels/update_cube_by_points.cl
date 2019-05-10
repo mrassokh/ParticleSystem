@@ -2,18 +2,13 @@
 #define Z (float3)(0.0f, 0.0f, 1.0f)
 #define DIV 1 / MAX_SPHERE_RADIUS
 
-
 typedef float4 Particle;
 
 void kernel update_Cube(global Particle * particles, float deltaTime, float3 gravityCenter, int isGravityActive)
 {
 	int				i = get_global_id(0);
 
-	//uint 	hexPoint = i % 10;
-	//if (hexPoint)
-	//	return;
 	global Particle *	particle = particles + i;
-	//Particle start = *particle;
 
 	float3 distance = particle->xyz - gravityCenter;
 	if (isGravityActive) {
@@ -28,10 +23,4 @@ void kernel update_Cube(global Particle * particles, float deltaTime, float3 gra
 		particle->xyz += velocity * deltaTime * cos(particle->w);
 		particle->w += deltaTime;
 	}
-
-	/*float4 deltaPos = particle - start;
-	for (int j = 1; j < 10; ++j) {
-		global Particle * particle_index = particles + i + j;
-		particle_index += deltaPos;
-	}*/
 };

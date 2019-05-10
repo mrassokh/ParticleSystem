@@ -22,8 +22,7 @@ CLEngine* CLEngine::m_engine = nullptr;
 CLEngine *CLEngine::getInstance()
 {
 	if (m_engine == nullptr){
-		m_engine = new CLEngine();
-		std::cout << "init m_engine : " << m_engine << std::endl;
+		m_engine = new CLEngine();		
 	};
 	return m_engine->m_isInit ? m_engine : nullptr;
 }
@@ -93,8 +92,6 @@ void 	CLEngine::defineContext()
 		  (cl_context_properties) kCGLShareGroup,
 		  0
 		};
-		std::cout << "init context " << std::endl;
-		std::cout<< "Using device: "<< m_usedDevice.getInfo<CL_DEVICE_NAME>() << std::endl;
 		int err;
 		m_context = cl::Context(m_usedDevice, conextProperties, NULL, NULL, &err);
 		if (err!= CL_SUCCESS)
@@ -121,21 +118,15 @@ void	CLEngine::addProgramSource(std::string const & fileName,
 	std::ifstream file(fileName);
 	if (!file)
 		throw CustomException(fileName + " is not opened");
-	std::cout << "fileName : " << fileName <<"/sourceName:" <<  sourceName << std::endl;
-
 	std::string sourceStr(std::istreambuf_iterator<char>(file),
 									(std::istreambuf_iterator<char>()));
-	std::cout<< "p2_5\n";
 	auto source = m_programSources.find(sourceName);
-	std::cout<< "p2_5_1\n";
 	if (source == m_programSources.end()) {
 		cl::Program::Sources sources;
 		sources.push_back(std::make_pair(strdup(sourceStr.c_str()), sourceStr.length() + 1)); // we use strdup here. it calls malloc. but who will free that memory?
-		std::cout << sourceStr.c_str() << std::endl;
-		std::cout<< "p2_6\n";
+		//std::cout << sourceStr.c_str() << std::endl;
 		m_programSources.emplace(std::make_pair(sourceName, sources));
 	} else {
-		std::cout<< "p2_7\n";
 		source->second.push_back(std::make_pair(strdup(sourceStr.c_str()), sourceStr.length() + 1));
 	}
 }
@@ -145,7 +136,7 @@ void 	CLEngine::addProgramFromSource(std::string const & sourceName, std::string
 	if (!m_isInit) {
 		throw CustomException("CL Engine is not initialised");
 	}
-		std::cout << "sourceName:" <<  sourceName <<"/programName:" <<  programName << std::endl;
+
 	auto source = m_programSources.find(sourceName);
 
 	if (source != m_programSources.end()) {
@@ -168,7 +159,7 @@ void 	CLEngine::addKernel(std::string const & programName,
 	}
 
 	auto program = m_programs.find(programName);
-	std::cout << "programName:" <<  programName <<"/kernelName:" <<  kernelName << std::endl;
+
 	if (program != m_programs.end()) {
 	   cl::Kernel kernel(program->second, funcName.c_str());
 	   m_kernels.emplace(std::make_pair(kernelName, kernel));

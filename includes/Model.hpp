@@ -19,7 +19,6 @@
 #include "GL/glew.h"
 #include "Camera.hpp"
 
-
 struct imGuiInfo {
 	int	 		ps;
 	int 	 	prev_ps;

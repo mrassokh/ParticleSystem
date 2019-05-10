@@ -63,20 +63,6 @@ void 		Model::initParticleSystems()
 	m_particleManager->init();
 }
 
-/*void   			Model::setGravityCenter(int mouseX, int mouseY, int width, int height)
-{
-	int centeredX = mouseX - width / 2;
-	int centeredY = -(mouseY - height / 2);
-	float rightDistance = static_cast<float> (centeredX * 2) / static_cast<float>(width);
-	float upDistance = static_cast<float> (centeredY * 2) / static_cast<float>(height);
-	glm::vec3 rightVector = m_camera->getRight() *  rightDistance;
-	glm::vec3 upVector = m_camera->getUp() *  upDistance;
-	glm::vec3 forwardVector = m_camera->getDirection() * DISTANCE_FROM_CAMERA_TO_GRAVITY_PLANE;
-	m_gravityCenter = m_camera->getPosition() + forwardVector + rightVector + upVector;
-
-	std::cout << m_gravityCenter.x << " " << m_gravityCenter.y << " " << m_gravityCenter.z << std::endl;
-}*/
-
 void   			Model::setPointFromMouse(int mouseX, int mouseY, int width, int height, bool isGravityPoint)
 {
 	int centeredX = mouseX - width / 2;
@@ -88,17 +74,14 @@ void   			Model::setPointFromMouse(int mouseX, int mouseY, int width, int height
 	glm::vec3 forwardVector = m_camera->getDirection() * DISTANCE_FROM_CAMERA_TO_GRAVITY_PLANE;
 	if (isGravityPoint) {
 		m_gravityCenter = m_camera->getPosition() + forwardVector + rightVector + upVector;
-		//std::cout << "gravity center" << m_gravityCenter.x << " " << m_gravityCenter.y << " " << m_gravityCenter.z << std::endl;
 	} else {
 		m_cursorPoint = m_camera->getPosition() + forwardVector + rightVector + upVector;
-		//std::cout << "cursor point" << m_cursorPoint.x << " " << m_cursorPoint.y << " " << m_cursorPoint.z << std::endl;
 	}
 }
 
-void   			Model::dropToDefaultGravityCenter()
+inline void   			Model::dropToDefaultGravityCenter()
 {
 	m_gravityCenter = glm::vec3(0.0f,0.0f,0.0f);
-	std::cout << m_gravityCenter.x << " " << m_gravityCenter.y << " " << m_gravityCenter.z << std::endl;
 }
 
 void   			Model::setDefaultView()

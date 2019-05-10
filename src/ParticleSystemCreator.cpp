@@ -24,9 +24,6 @@ ParticleSystemCreator::ParticleSystemCreator()
 	m_createFunctions.push_back(&ParticleSystemCreator::createParticleSystemCube);
 	m_createFunctions.push_back(&ParticleSystemCreator::createParticleSystemPoint);
 	m_createFunctions.push_back(&ParticleSystemCreator::createParticleSystemCube);
-	/*m_createFunctions.push_back(&ParticleSystemCreator::createParticleSystemSphereLive);
-	m_createFunctions.push_back(&ParticleSystemCreator::createParticleSystemCubeLive);
-	/*m_createFunctions.push_back(&ParticleSystemCreator::createParticleSystemQuad);*/
 }
 
 ParticleSystemCreator::~ParticleSystemCreator()
@@ -43,7 +40,7 @@ psPtr 	ParticleSystemCreator::createParticleSystem(psType type, clePtr clEngine,
 
 psPtr 	ParticleSystemCreator::createParticleSystemPoint(clePtr clEngine, psInfo const & info, int const particleCount) const
 {
-	psPtr psPoint = std::make_shared<ParticleSystemPoint>();//std::shared_ptr<ParticleSystem>(new ParticleSystemPoint());
+	psPtr psPoint = std::make_shared<ParticleSystemPoint>();
 	initParticleSystem(psPoint, clEngine, info, particleCount);
 	return psPoint;
 }
@@ -52,17 +49,8 @@ psPtr 	ParticleSystemCreator::createParticleSystemCube(clePtr clEngine, psInfo c
 {
 	psPtr psCube = std::shared_ptr<ParticleSystem>(new ParticleSystemPoint());
 	initParticleSystem(psCube, clEngine, info, particleCount);
-	//psCube->setTexture(info.textureName);
 	return psCube;
 }
-
-/*psPtr 	ParticleSystemCreator::createParticleSystemBrick(clePtr clEngine, psInfo const & info) const
-{
-	psPtr psQuad = std::shared_ptr<ParticleSystem>(new ParticleSystemBrick());
-	initParticleSystem(psQuad, clEngine, info);
-	psQuad->setTexture(info.textureName);
-	return psQuad;
-}*/
 
 void 	ParticleSystemCreator::initParticleSystem(psPtr particleSystem, clePtr clEngine, psInfo const & info, int const particleCount) const
 {

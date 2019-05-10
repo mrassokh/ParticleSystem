@@ -21,7 +21,6 @@
 
 #include "glm/mat4x4.hpp"
 #include "CustomExceptions.hpp"
-//#include "glm/gtc/type_ptr.hpp"
 
 class Shader {
 public:

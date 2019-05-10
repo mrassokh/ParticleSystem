@@ -21,7 +21,6 @@
 #else
 #include <CL/cl.h>
 #include <CL/cl.hpp>
-//#include <GL/OpenGL.h>
 #endif
 #include <vector>
 #include <map>
@@ -53,8 +52,6 @@ public:
 	cl::Device const & 			getDevice() const {return m_usedDevice;};
 	void 						init();
 	void 						clear();
-
-
 
 private:
 	CLEngine();

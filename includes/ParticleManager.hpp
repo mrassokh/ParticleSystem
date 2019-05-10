@@ -39,8 +39,6 @@ public:
 	void 						updateCurrentParticleSystem(psType const type, glm::vec3 const & gravityCenter, bool isGravityActive);
 	psPtr &						getCurrentParticleSystem(psType const type) {return m_particleSystems[type];};
 
-	void 						draw(glm::mat4 const & projection, glm::mat4 const & view);
-
 private:
 	std::shared_ptr<CLEngine> 	m_CLE;
 	ParticleSystems				m_particleSystems;
