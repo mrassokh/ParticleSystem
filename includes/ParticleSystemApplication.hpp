@@ -27,15 +27,11 @@ private:
 	ParticleSystemApplication & operator = (ParticleSystemApplication const & rhs) = delete;
 
 	void 		init();
-	void 		clear();
 
-	std::unique_ptr<Model> m_model;
-	std::unique_ptr<View> 	m_view;
+	std::unique_ptr<View> 			m_view;
 	std::unique_ptr<Controller> 	m_controller;
-	//View		*m_view;
-	//Model *m_model;
-	//Controller 	*m_controller;
+	Model 							*m_model;
 
-	bool 		 m_isInit;
+	bool 		 					m_isInit;
 };
 #endif /* end of include guard: PARTICLE_SYSTEM_APPLICATION */

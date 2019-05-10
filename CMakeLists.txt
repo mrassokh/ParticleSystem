@@ -29,6 +29,8 @@ set ( CL_CXX_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/CL/ )
 
 set ( IMGUI_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/imgui/ )
 set ( IMGUI_LIBRARY imgui )
+set ( IMGUI_SDL_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/imgui_sdl_impl/ )
+
 
 
 find_package(OpenGL REQUIRED)
@@ -57,12 +59,6 @@ set(PARTICLESYSTEM_INCLUDE_DIRS
   includes
 )
 
-set(LIB_INCLUDE_DIRS
-  libs/inc
-)
-
-add_library(hello SHARED libs/testlib.cpp)
-
 set(PARTICLESYSTEM_LIBS
   	${OPENGL_LIBRARY}
   	${SDL2_LIBRARY}
@@ -73,16 +69,16 @@ set(PARTICLESYSTEM_LIBS
 
 set(PARTICLESYSTEM_INCLUDES
 	${PARTICLESYSTEM_INCLUDE_DIRS}
-	${LIB_INCLUDE_DIRS}
 	${GLM_INCLUDE_DIRS}
     ${SDL2_INCLUDE_DIR}
     ${GLEW_INCLUDE_DIRS}
   	${IMGUI_INCLUDE_DIRS}
+	${IMGUI_SDL_INCLUDE_DIRS}
   	${OpenCL_INCLUDE_DIRS}
 	${CL_CXX_INCLUDE_DIRS}
 )
 
 include_directories(${PARTICLESYSTEM_INCLUDES})
 
-add_executable(particleSystem main.cpp ${PARTICLESYSTEM_SOURCES})
-target_link_libraries(particleSystem hello ${PARTICLESYSTEM_LIBS})
+add_executable(particleSystem main.cpp ${IMGUI_SDL_INCLUDE_DIRS}/imgui_impl_sdl_gl3.cpp ${PARTICLESYSTEM_SOURCES})
+target_link_libraries(particleSystem ${PARTICLESYSTEM_LIBS})

@@ -26,10 +26,8 @@ Resource::Resource()
 
 Resource::~Resource()
 {
-	std::cout << "resource destructor\n";
 	m_shaderMap.clear();
 	m_psInfoMap.clear();
-	std::cout << "resource destructor finish\n";
 }
 
 void		Resource::loadShader(std::string const & vPath, std::string const & fPath, std::string const & name)

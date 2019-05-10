@@ -197,7 +197,7 @@ void 		View::drawPointPS(psPtr & particleSystem, glm::mat4 const & projection_vi
 	shader->use();
 	shader->setMat4("projection_view", projection_view);
 	shader->setVec3("cursorPoint", cursorPoint);
-	
+
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glBindBuffer(GL_ARRAY_BUFFER, particleSystem->getIBO());

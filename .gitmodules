@@ -13,3 +13,6 @@
 [submodule "3rdParty/CL"]
 	path = 3rdParty/CL
 	url = https://github.com/mrassokh/OpenCL_CXX.git
+[submodule "3rdParty/imgui_sdl_impl"]
+	path = 3rdParty/imgui_sdl_impl
+	url = https://github.com/mrassokh/imgui_sdl.git
